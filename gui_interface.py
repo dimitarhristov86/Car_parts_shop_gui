@@ -12,10 +12,10 @@ class MainWidget(qtw.QWidget):
 
     def setup_ui(self):
         self.setWindowTitle("Car Parts Shop")
-        # self.setGeometry(100, 100, 1200, 800)
+        self.setFixedSize(960, 640)
         window = qtw.QLabel(self)
         window.setStyleSheet("background-image: url(/home/dimitar/PycharmProjects/Car_parts_shop_gui/images/image.png)")
-        window.setFixedSize(1600, 1000)
+        window.setFixedSize(960, 640)
         login_input = qtw.QLineEdit(self)
         password_input = qtw.QLineEdit(self)
         password_input.setEchoMode(qtw.QLineEdit.Password)
@@ -24,8 +24,8 @@ class MainWidget(qtw.QWidget):
         self.btn_registration = qtw.QPushButton("Registration")
         buttons_layout = qtw.QHBoxLayout()
         buttons_layout.addWidget(self.btn_login)
-        buttons_layout.addWidget(self.btn_exit)
         buttons_layout.addWidget(self.btn_registration)
+        buttons_layout.addWidget(self.btn_exit)
         buttons_layout.setSpacing(100)
         form_layout = qtw.QFormLayout()
         form_layout.addRow("Enter email: ", login_input)
