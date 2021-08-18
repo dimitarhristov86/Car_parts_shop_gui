@@ -1,6 +1,6 @@
 import sys
 from PyQt5 import QtWidgets as qtw
-from PyQt5 import  QtGui as qtg
+from PyQt5 import QtGui as qtg
 from PyQt5 import QtCore as qtc
 
 
@@ -12,10 +12,10 @@ class MainWidget(qtw.QWidget):
 
     def setup_ui(self):
         self.setWindowTitle("Car Parts Shop")
-        self.setGeometry(100, 100, 1280, 800)
-        wi = qtw.QLabel(self)
-        wi.setStyleSheet("background-image: url(/home/dimitar_hristov86/PycharmProjects/Car_parts_shop/images/2161518548_eb13cddfe5.jpg)")
-        wi.setFixedSize(1280, 800)
+        # self.setGeometry(100, 100, 1200, 800)
+        window = qtw.QLabel(self)
+        window.setStyleSheet("background-image: url(/home/dimitar/PycharmProjects/Car_parts_shop_gui/images/image.png)")
+        window.setFixedSize(1600, 1000)
         login_input = qtw.QLineEdit(self)
         password_input = qtw.QLineEdit(self)
         password_input.setEchoMode(qtw.QLineEdit.Password)
