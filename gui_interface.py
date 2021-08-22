@@ -2,10 +2,7 @@ import sys
 
 import mysql.connector
 from PyQt5 import QtWidgets as qtw
-from PyQt5 import QtGui as qtg
-from PyQt5 import QtCore as qtc
 import mysql.connector as mc
-from mysql.connector import connection
 
 
 class MainWidget(qtw.QWidget):
@@ -42,28 +39,22 @@ class MainWidget(qtw.QWidget):
         try:
             email = self.login_input.text()
             password = self.password_input.text()
-
             mydb = mc.connect(
                 host="localhost",
                 user="root",
                 password="",
                 database="car_parts_gui"
-
             )
-
             mycursor = mydb.cursor()
             query = f""" SELECT * FROM users WHERE 
             email='{email}' AND password='{password}'
             """
             mycursor.execute(query)
             result = mycursor.fetchall()
-
             if result == None:
                 print("Incorrect email or password")
-
             else:
                 print("You are logged in")
-
         except mysql.connector.Error as e:
             print(e)
 
