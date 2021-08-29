@@ -10,6 +10,7 @@ class MainWidget(qtw.QWidget):
         super().__init__(*args, **kwargs)
         self.setup_ui()
         self.btn_login.clicked.connect(self.login)
+        self.btn_exit.clicked.connect(exit)
         self.show()
 
     def setup_ui(self):
@@ -50,7 +51,7 @@ class MainWidget(qtw.QWidget):
             email='{email}' AND password='{password}'
             """
             mycursor.execute(query)
-            result = mycursor.fetchall()
+            result = mycursor.fetchone()
             if result == None:
                 print("Incorrect email or password")
             else:
