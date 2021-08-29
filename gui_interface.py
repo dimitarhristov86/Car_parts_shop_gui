@@ -27,6 +27,8 @@ class MainWidget(qtw.QWidget):
         self.btn_login = qtw.QPushButton("Login")
         self.btn_exit = qtw.QPushButton("Exit")
         self.btn_registration = qtw.QPushButton("Registration")
+        self.textfield = qtw.QLabel(self)
+        self.textfield.setStyleSheet("color: red")
         buttons_layout = qtw.QHBoxLayout()
         buttons_layout.addWidget(self.btn_login)
         buttons_layout.addWidget(self.btn_registration)
@@ -35,6 +37,7 @@ class MainWidget(qtw.QWidget):
         form_layout = qtw.QFormLayout()
         form_layout.addRow("Enter email: ", self.login_input)
         form_layout.addRow("Enter password: ", self.password_input)
+        form_layout.addRow(self.textfield)
         form_layout.addRow("", buttons_layout)
         self.setLayout(form_layout)
 
@@ -42,6 +45,8 @@ class MainWidget(qtw.QWidget):
         try:
             email = self.login_input.text()
             password = self.password_input.text()
+            if len(email) == 0 and len(password) == 0:
+                self.textfield.setText("Please fill all fields! ")
             mydb = mc.connect(
                 host="localhost",
                 user="root",
@@ -58,6 +63,7 @@ class MainWidget(qtw.QWidget):
                 print("Incorrect email or password")
             else:
                 print("You are logged in")
+                self.textfield.setText("You are logged in")
         except mysql.connector.Error as e:
             print(e)
 
@@ -76,6 +82,8 @@ class MainWidget(qtw.QWidget):
         self.user_confirm_password = qtw.QLineEdit(self)
         self.user_created = datetime.now()
         self.btn_submit = qtw.QPushButton('Submit')
+        self.textfield = qtw.QLabel(self)
+        self.textfield.setStyleSheet("color: red")
         layout = qtw.QVBoxLayout()
         layout.addWidget(self.btn_submit)
         new_layout = qtw.QFormLayout()
@@ -87,10 +95,10 @@ class MainWidget(qtw.QWidget):
         self.user_password.setEchoMode(qtw.QLineEdit.Password)
         new_layout.addRow("Re-enter password: ", self.user_confirm_password)
         self.user_confirm_password.setEchoMode(qtw.QLineEdit.Password)
+        new_layout.addRow(self.textfield)
         new_layout.addRow("", layout)
         self.setLayout(new_layout)
         self.show()
-
         # ---------------------------------- signals --------------------------------- #
         # self.btn_submit.clicked.connect(self.onSubmit)
 
