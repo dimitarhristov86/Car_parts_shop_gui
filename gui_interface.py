@@ -3,6 +3,7 @@ import sys
 import mysql.connector
 from PyQt5 import QtWidgets as qtw
 import mysql.connector as mc
+from datetime import datetime
 
 
 class MainWidget(qtw.QWidget):
@@ -10,6 +11,7 @@ class MainWidget(qtw.QWidget):
         super().__init__(*args, **kwargs)
         self.setup_ui()
         self.btn_login.clicked.connect(self.login)
+        self.btn_registration.clicked.connect(self.sign_up_form)
         self.btn_exit.clicked.connect(exit)
         self.show()
 
@@ -59,11 +61,48 @@ class MainWidget(qtw.QWidget):
         except mysql.connector.Error as e:
             print(e)
 
+    def sign_up_form(self):
+        super().__init__()
+        self.setWindowTitle('Sign up Form')
+        self.setFixedSize(1200, 640)
+        window = qtw.QLabel(self)
+        window.setStyleSheet("background-image: url(/home/dimitar/PycharmProjects/Car_parts_shop_gui/images/image.png)")
+        self.setFixedSize(1200, 640)
+        self.user_first_name = qtw.QLineEdit(self)
+        self.user_last_name = qtw.QLineEdit(self)
+        self.user_email = qtw.QLineEdit(self)
+        self.user_phone_number = qtw.QLineEdit(self)
+        self.user_password = qtw.QLineEdit(self)
+        self.user_confirm_password = qtw.QLineEdit(self)
+        self.user_created = datetime.now()
+        self.btn_submit = qtw.QPushButton('Submit')
+        layout = qtw.QVBoxLayout()
+        layout.addWidget(self.user_first_name)
+        layout.addWidget(self.user_last_name)
+        layout.addWidget(self.user_email)
+        layout.addWidget(self.user_phone_number)
+        layout.addWidget(self.user_password)
+        layout.addWidget(self.user_confirm_password)
+        layout.addWidget(self.btn_submit)
+        form_layout = qtw.QFormLayout()
+        form_layout.addRow("Enter your first name: ", self.user_first_name)
+        form_layout.addRow("Enter your last name: ", self.user_last_name)
+        form_layout.addRow("Enter email: ", self.user_email)
+        form_layout.addRow("Enter phone_number: ", self.user_phone_number)
+        form_layout.addRow("Enter password: ", self.user_password)
+        self.user_password.setEchoMode(qtw.QLineEdit.Password)
+        form_layout.addRow("Re-enter password: ", self.user_confirm_password)
+        self.user_confirm_password.setEchoMode(qtw.QLineEdit.Password)
+        form_layout.addRow("", layout)
+        self.setLayout(form_layout)
+        self.show()
+
+        # ---------------------------------- signals --------------------------------- #
+        # self.btn_submit.clicked.connect(self.onSubmit)
+
 
 app = qtw.QApplication(sys.argv)
 
 window = MainWidget()
-
-window.show()
 
 sys.exit(app.exec())
