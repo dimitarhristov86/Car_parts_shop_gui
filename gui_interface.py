@@ -97,7 +97,7 @@ class MainWidget(qtw.QWidget):
         self.user_password = qtw.QLineEdit(self)
         self.user_confirm_password = qtw.QLineEdit(self)
         date_time = datetime.now()
-        self.user_created = date_time.strftime("%m/%d/%Y %H:%M:%S")
+        self.user_created = date_time.strftime("%Y/%m/%d %H:%M:%S")
         self.btn_submit = qtw.QPushButton('Submit')
         self.btn_submit.setFixedSize(150, 50)
         self.textfield = qtw.QLabel(self)
@@ -124,6 +124,7 @@ class MainWidget(qtw.QWidget):
             if len(user_input) == 0:
                 self.textfield.setText("Please fill all fields! ")
 
+
     def main_menu(self):
         super().__init__()
         self.setWindowTitle("Car Parts Shop Main Menu")
@@ -131,6 +132,7 @@ class MainWidget(qtw.QWidget):
         window = qtw.QLabel(self)
         window.setStyleSheet("background-color: blue")
         window.setFixedSize(900, 422)
+
 
     def add_data_to_db(self):
         super().__init__()
@@ -150,7 +152,8 @@ class MainWidget(qtw.QWidget):
             mycursor = mydb.cursor()
             query = f"""
             INSERT INTO users(first_name, last_name, email, phone_number, password, created)
-            VALUES({user_f_name}, {user_l_name}, {user_email}, {user_ph_number}, {user_password}, {user_created});
+            VALUES('{user_f_name}', '{user_l_name}', '{user_email}',
+            '{user_ph_number}', '{user_password}', '{user_created}')
             """
             mycursor.execute(query)
         except mysql.connector.Error as e:
