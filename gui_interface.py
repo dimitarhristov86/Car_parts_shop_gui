@@ -133,7 +133,6 @@ class MainWidget(qtw.QWidget):
         window.setStyleSheet("background-color: blue")
         window.setFixedSize(900, 422)
 
-
     def add_data_to_db(self):
         super().__init__()
         try:
@@ -147,13 +146,12 @@ class MainWidget(qtw.QWidget):
                 host="localhost",
                 user="root",
                 password="",
-                database="car_parts_gui"
-            )
+                database="car_parts_gui")
             mycursor = mydb.cursor()
             query = f"""
             INSERT INTO users(first_name, last_name, email, phone_number, password, created)
             VALUES('{user_f_name}', '{user_l_name}', '{user_email}',
-            '{user_ph_number}', '{user_password}', '{user_created}')
+            '{user_ph_number}', '{user_password}', '{user_created}');
             """
             mycursor.execute(query)
         except mysql.connector.Error as e:
