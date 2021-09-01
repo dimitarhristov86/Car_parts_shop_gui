@@ -58,6 +58,7 @@ class MainWidget(qtw.QWidget):
         self.show()
         self.btn_submit.clicked.connect(self.user_verification)
         self.btn_exit.clicked.connect(exit)
+        self.textfield.setText("")
         if self.login_input.text() == 0 and self.password_input.text() == 0:
             self.textfield.setText('Please fill all fields! ')
 
@@ -100,11 +101,15 @@ class MainWidget(qtw.QWidget):
         self.user_confirm_password = qtw.QLineEdit(self)
         self.user_created = datetime.now()
         self.btn_submit = qtw.QPushButton('Submit')
+        self.btn_to_login = qtw.QPushButton('Click here to log in')
         self.btn_submit.setFixedSize(150, 50)
+        self.btn_to_login.setFixedSize(150, 50)
         self.textfield = qtw.QLabel(self)
         self.textfield.setStyleSheet("color: red")
-        layout = qtw.QVBoxLayout()
+        layout = qtw.QHBoxLayout()
         layout.addWidget(self.btn_submit)
+        layout.addWidget(self.btn_to_login)
+        layout.setSpacing(400)
         new_layout = qtw.QFormLayout()
         new_layout.addRow("Enter your first name: ", self.user_first_name)
         new_layout.addRow("Enter your last name: ", self.user_last_name)
@@ -117,11 +122,10 @@ class MainWidget(qtw.QWidget):
         new_layout.addRow(self.textfield)
         new_layout.addRow("", layout)
         self.setLayout(new_layout)
-        self.show()
         self.btn_submit.clicked.connect(self.add_data_to_db)
-        qline_edit = qtw.QLineEdit(self)
-        if qline_edit == 0:
-                self.textfield.setText("Please fill all fields! ")
+        self.btn_to_login.clicked.connect(self.sign_in)
+        self.textfield.setText("Please fill all fields! ")
+        self.show()
 
     def main_menu(self):
         super().__init__()
