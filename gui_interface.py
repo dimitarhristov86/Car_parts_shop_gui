@@ -55,19 +55,15 @@ class MainWidget(qtw.QWidget):
         form_layout.addRow(self.textfield)
         form_layout.addRow("", btn_layout)
         self.setLayout(form_layout)
-        self.show()
         self.btn_submit.clicked.connect(self.user_verification)
         self.btn_exit.clicked.connect(exit)
         self.textfield.setText("")
-        if self.login_input.text() == 0 and self.password_input.text() == 0:
-            self.textfield.setText('Please fill all fields! ')
+        self.show()
 
     def user_verification(self):
         try:
             email = self.login_input.text()
             password = self.password_input.text()
-            if len(email) == 0 and len(password) == 0:
-                self.textfield.setText("Please fill all fields! ")
             mydb = mc.connect(
                 host="localhost",
                 user="root",
@@ -80,8 +76,12 @@ class MainWidget(qtw.QWidget):
             """
             mycursor.execute(query)
             self.result = mycursor.fetchone()
-            if self.result == None:
+            if len(email) == 0 and len(password) == 0:
+                print("Please fill all fields! ")
+                self.textfield.setText("Please fill all fields! ")
+            elif len(email) != 0 and len(password) != 0 or self.result == None:
                 print("Incorrect email or password")
+                self.textfield.setText("Incorrect email or password! ")
             else:
                 print("You are logged in")
                 self.main_menu()
@@ -122,10 +122,9 @@ class MainWidget(qtw.QWidget):
         new_layout.addRow(self.textfield)
         new_layout.addRow("", layout)
         self.setLayout(new_layout)
-        self.btn_submit.clicked.connect(self.add_data_to_db)
-        self.btn_to_login.clicked.connect(self.sign_in)
-        self.textfield.setText("Please fill all fields! ")
+        self.textfield.setText("")
         self.show()
+        self.btn_submit.clicked.connect(self.check_fields_data)
 
     def main_menu(self):
         super().__init__()
@@ -166,6 +165,26 @@ class MainWidget(qtw.QWidget):
             self.textfield.setText("You can log in now! ")
         except mysql.connector.Error as e:
             print(e)
+
+    def check_fields_data(self):
+        super().__init__()
+        first_name = self.user_first_name.text()
+        last_name = self.user_last_name.text()
+        email = self.user_email.text()
+        phone_number = self.user_phone_number.text()
+        password = self.user_password.text()
+        confirm_password = self.user_confirm_password.text()
+        self.textfield.setText('')
+        try:
+            if password != confirm_password:
+                self.textfield.setText("Password doesn't match! ")
+            elif len(first_name) or len(last_name) or len(email) or len(phone_number) or len(password)\
+                    or len(confirm_password) == 0:
+                self.textfield.setText('Please fill all fields! ')
+        except password == confirm_password:
+            self.textfield.setText("Yoy can log in now! ")
+        if password == confirm_password:
+            self.add_data_to_db()
 
 
 app = qtw.QApplication(sys.argv)
