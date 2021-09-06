@@ -92,7 +92,7 @@ class MainWidget(qtw.QWidget):
         super().__init__()
         self.setWindowTitle('Sign up Form')
         self.setFixedSize(900, 422)
-        self.role = "user"
+        # self.role = 'admin'
         self.user_first_name = qtw.QLineEdit(self)
         self.user_last_name = qtw.QLineEdit(self)
         self.user_email = qtw.QLineEdit(self)
@@ -109,15 +109,15 @@ class MainWidget(qtw.QWidget):
         layout = qtw.QHBoxLayout()
         layout.addWidget(self.btn_submit)
         layout.addWidget(self.btn_to_login)
-        layout.setSpacing(400)
+        layout.setSpacing(300)
         new_layout = qtw.QFormLayout()
         new_layout.addRow("Enter your first name: ", self.user_first_name)
         new_layout.addRow("Enter your last name: ", self.user_last_name)
         new_layout.addRow("Enter email: ", self.user_email)
-        new_layout.addRow("Enter phone_number: ", self.user_phone_number)
-        new_layout.addRow("Enter password: ", self.user_password)
+        new_layout.addRow("Enter phone number: ", self.user_phone_number)
+        new_layout.addRow("Enter password (20 characters max): ", self.user_password)
         self.user_password.setEchoMode(qtw.QLineEdit.Password)
-        new_layout.addRow("Re-enter password: ", self.user_confirm_password)
+        new_layout.addRow("Confirm password (20 characters max): ", self.user_confirm_password)
         self.user_confirm_password.setEchoMode(qtw.QLineEdit.Password)
         new_layout.addRow(self.textfield)
         new_layout.addRow("", layout)
@@ -151,6 +151,7 @@ class MainWidget(qtw.QWidget):
                 password="",
                 database="car_parts_gui")
             mycursor = mydb.cursor()
+            # role = self.role
             user_f_name = self.user_first_name.text()
             user_l_name = self.user_last_name.text()
             user_email = self.user_email.text()
@@ -158,7 +159,7 @@ class MainWidget(qtw.QWidget):
             user_password = self.user_password.text()
             user_created = self.user_created
             query = 'INSERT INTO users(first_name, last_name, email, phone_number, password, created) ' \
-                    'VALUES(%s, %s,  %s, %s, %s, %s)'
+                    'VALUES(%s, %s, %s, %s, %s, %s)'
             values = (user_f_name, user_l_name, user_email, user_ph_number, user_password, user_created)
             mycursor.execute(query, values)
             mydb.commit()
@@ -175,16 +176,14 @@ class MainWidget(qtw.QWidget):
         password = self.user_password.text()
         confirm_password = self.user_confirm_password.text()
         self.textfield.setText('')
+        print(first_name, last_name, email, phone_number, password, confirm_password)
         try:
             if password != confirm_password:
                 self.textfield.setText("Password doesn't match! ")
-            elif len(first_name) or len(last_name) or len(email) or len(phone_number) or len(password)\
-                    or len(confirm_password) == 0:
-                self.textfield.setText('Please fill all fields! ')
+            else:
+                self.add_data_to_db()
         except password == confirm_password:
-            self.textfield.setText("Yoy can log in now! ")
-        if password == confirm_password:
-            self.add_data_to_db()
+            self.textfield.setText("You can log in now!")
 
 
 app = qtw.QApplication(sys.argv)
