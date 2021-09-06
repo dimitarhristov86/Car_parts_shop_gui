@@ -169,14 +169,9 @@ class MainWidget(qtw.QWidget):
 
     def check_fields_data(self):
         super().__init__()
-        first_name = self.user_first_name.text()
-        last_name = self.user_last_name.text()
-        email = self.user_email.text()
-        phone_number = self.user_phone_number.text()
         password = self.user_password.text()
         confirm_password = self.user_confirm_password.text()
         self.textfield.setText('')
-        print(first_name, last_name, email, phone_number, password, confirm_password)
         try:
             if password != confirm_password:
                 self.textfield.setText("Password doesn't match! ")
