@@ -79,7 +79,7 @@ class MainWidget(qtw.QWidget):
             if len(email) == 0 and len(password) == 0:
                 print("Please fill all fields! ")
                 self.textfield.setText("Please fill all fields! ")
-            elif len(email) != 0 and len(password) != 0 or self.result == None:
+            elif self.result == None:
                 print("Incorrect email or password")
                 self.textfield.setText("Incorrect email or password! ")
             else:
