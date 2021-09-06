@@ -92,7 +92,6 @@ class MainWidget(qtw.QWidget):
         super().__init__()
         self.setWindowTitle('Sign up Form')
         self.setFixedSize(900, 422)
-        # self.role = 'admin'
         self.user_first_name = qtw.QLineEdit(self)
         self.user_last_name = qtw.QLineEdit(self)
         self.user_email = qtw.QLineEdit(self)
@@ -124,6 +123,7 @@ class MainWidget(qtw.QWidget):
         self.setLayout(new_layout)
         self.textfield.setText("")
         self.show()
+        self.btn_to_login.clicked.connect(self.sign_in)
         self.btn_submit.clicked.connect(self.check_fields_data)
 
     def main_menu(self):
@@ -172,12 +172,10 @@ class MainWidget(qtw.QWidget):
         password = self.user_password.text()
         confirm_password = self.user_confirm_password.text()
         self.textfield.setText('')
-        try:
-            if password != confirm_password:
-                self.textfield.setText("Password doesn't match! ")
-            else:
-                self.add_data_to_db()
-        except password == confirm_password:
+        if password != confirm_password:
+            self.textfield.setText("Password doesn't match! ")
+        else:
+            self.add_data_to_db()
             self.textfield.setText("You can log in now!")
 
 
