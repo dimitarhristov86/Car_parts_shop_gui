@@ -11,6 +11,7 @@ class MainWidget(qtw.QWidget):
         super().__init__(*args, **kwargs)
         self.setup_ui()
         self.textfield = qtw.QLabel()
+        self.table_widget = qtw.QTableWidget()
         self.textfield.setStyleSheet('color: red')
         self.textfield.setText('')
         self.btn_sign_in.clicked.connect(self.sign_in)
@@ -141,6 +142,7 @@ class MainWidget(qtw.QWidget):
         btn_layout.addWidget(self.btn_admin_menu)
         self.setLayout(btn_layout)
         self.show()
+        self.btn_parts_view.clicked.connect(self.car_parts_menu)
 
     def add_data_to_db(self):
         super().__init__()
@@ -151,7 +153,6 @@ class MainWidget(qtw.QWidget):
                 password="",
                 database="car_parts_gui")
             mycursor = mydb.cursor()
-            # role = self.role
             user_f_name = self.user_first_name.text()
             user_l_name = self.user_last_name.text()
             user_email = self.user_email.text()
@@ -177,6 +178,42 @@ class MainWidget(qtw.QWidget):
         else:
             self.add_data_to_db()
             self.textfield.setText("You can log in now!")
+
+    def car_parts_menu(self):
+        super().__init__()
+        try:
+            mydb = mc.connect(
+                host="localhost",
+                user="root",
+                password="",
+                database="car_parts_gui")
+            mycursor = mydb.cursor()
+            query = 'SELECT * FROM car_parts'
+            mycursor.execute(query)
+            self.result = mycursor.fetchall()
+            self.table_widget.setColumnWidth(0, 250)
+            self.table_widget.setColumnWidth(1, 250)
+            self.table_widget.setColumnWidth(2, 250)
+            self.table_widget.setColumnWidth(3, 250)
+            self.table_widget.setColumnWidth(4, 250)
+            self.table_widget.setColumnWidth(5, 250)
+            self.table_widget.setColumnWidth(6, 250)
+            self.table_widget.setHorizontalHeaderLabels(['Code', 'Product name', 'Category', 'Buying price',
+                                                         'Client price', 'Application', 'Manufacturer'])
+            self.table_widget.setRowCount(20)
+            tablerow= 0
+            for row in query:
+                self.table_widget.setItem(tablerow, 0, qtw.QTableWidgetItem(row[0]))
+                self.table_widget.setItem(tablerow, 1, qtw.QTableWidgetItem(row[1]))
+                self.table_widget.setItem(tablerow, 2, qtw.QTableWidgetItem(row[2]))
+                self.table_widget.setItem(tablerow, 3, qtw.QTableWidgetItem(row[3]))
+                self.table_widget.setItem(tablerow, 4, qtw.QTableWidgetItem(row[4]))
+                self.table_widget.setItem(tablerow, 5, qtw.QTableWidgetItem(row[5]))
+                self.table_widget.setItem(tablerow, 6, qtw.QTableWidgetItem(row[6]))
+                tablerow += 1
+        except mysql.connector.Error as e:
+            print(e)
+        self.show()
 
 
 app = qtw.QApplication(sys.argv)
