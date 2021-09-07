@@ -2,6 +2,7 @@ import sys
 
 import mysql.connector
 from PyQt5 import QtWidgets as qtw
+from PyQt5 import QtGui as qtg
 import mysql.connector as mc
 from datetime import datetime
 
@@ -12,6 +13,7 @@ class MainWidget(qtw.QWidget):
         self.setup_ui()
         self.textfield = qtw.QLabel()
         self.table_widget = qtw.QTableWidget()
+        self.cursor = qtg.QTextCursor()
         self.textfield.setStyleSheet('color: red')
         self.textfield.setText('')
         self.btn_sign_in.clicked.connect(self.sign_in)
@@ -181,6 +183,14 @@ class MainWidget(qtw.QWidget):
 
     def car_parts_menu(self):
         super().__init__()
+        self.setWindowTitle("Car Parts")
+        self.setFixedSize(900, 422)
+        self.btn_show_parts = qtw.QPushButton("Show parts")
+        layout = qtw.QHBoxLayout()
+        layout.addWidget(self.table_widget)
+        layout.addWidget(self.btn_show_parts)
+        self.table_widget.setRowCount(20)
+        self.table_widget.setColumnCount(7)
         try:
             mydb = mc.connect(
                 host="localhost",
@@ -190,27 +200,11 @@ class MainWidget(qtw.QWidget):
             mycursor = mydb.cursor()
             query = 'SELECT * FROM car_parts'
             mycursor.execute(query)
-            self.result = mycursor.fetchall()
-            self.table_widget.setColumnWidth(0, 250)
-            self.table_widget.setColumnWidth(1, 250)
-            self.table_widget.setColumnWidth(2, 250)
-            self.table_widget.setColumnWidth(3, 250)
-            self.table_widget.setColumnWidth(4, 250)
-            self.table_widget.setColumnWidth(5, 250)
-            self.table_widget.setColumnWidth(6, 250)
-            self.table_widget.setHorizontalHeaderLabels(['Code', 'Product name', 'Category', 'Buying price',
-                                                         'Client price', 'Application', 'Manufacturer'])
-            self.table_widget.setRowCount(20)
-            tablerow= 0
-            for row in query:
-                self.table_widget.setItem(tablerow, 0, qtw.QTableWidgetItem(row[0]))
-                self.table_widget.setItem(tablerow, 1, qtw.QTableWidgetItem(row[1]))
-                self.table_widget.setItem(tablerow, 2, qtw.QTableWidgetItem(row[2]))
-                self.table_widget.setItem(tablerow, 3, qtw.QTableWidgetItem(row[3]))
-                self.table_widget.setItem(tablerow, 4, qtw.QTableWidgetItem(row[4]))
-                self.table_widget.setItem(tablerow, 5, qtw.QTableWidgetItem(row[5]))
-                self.table_widget.setItem(tablerow, 6, qtw.QTableWidgetItem(row[6]))
-                tablerow += 1
+            for i in range(mycursor.rowcount):
+                self.result = mycursor.fetchall()
+                for row in self.result:
+                    self.cursor = qtg.QTextCursor(self.textEdit.document())
+                    self.cursor.insertText(row[0: -1])
         except mysql.connector.Error as e:
             print(e)
         self.show()
