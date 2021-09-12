@@ -26,7 +26,7 @@ class MainWidget(qtw.QWidget):
         self.setFixedSize(900, 422)
         self.window = qtw.QLabel(self)
         self.window.setStyleSheet(
-            "background-image: url(/home/dimitar/PycharmProjects/Car_parts_shop_gui/images/1.jpg)")
+            "background-image: url(./images/1.jpg)")
         self.window.setFixedSize(900, 422)
         self.btn_sign_in = qtw.QPushButton("Sign in")
         self.btn_exit = qtw.QPushButton("Exit")
