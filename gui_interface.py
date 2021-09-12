@@ -209,7 +209,7 @@ class MainWidget(qtw.QWidget):
         except mysql.connector.Error as e:
             print(e)
         self.show()
-
+    # TODO
     def read_db_config(self, filename='config.ini', section='mysql'):
         parser = ConfigParser()
         parser.read(filename)
