@@ -213,6 +213,9 @@ class MainWidget(qtw.QWidget):
     def read_db_config(self, filename='config.ini', section='mysql'):
         parser = ConfigParser()
         parser.read(filename)
+        db_config = {}
+        if parser.has_section(section):
+            items = parser.items(section)
 
 
 app = qtw.QApplication(sys.argv)
