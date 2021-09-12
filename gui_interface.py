@@ -5,6 +5,7 @@ from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtGui as qtg
 import mysql.connector as mc
 from datetime import datetime
+from configparser import ConfigParser
 
 
 class MainWidget(qtw.QWidget):
@@ -208,6 +209,10 @@ class MainWidget(qtw.QWidget):
         except mysql.connector.Error as e:
             print(e)
         self.show()
+
+    def read_db_config(self, filename='config.ini', section='mysql'):
+        parser = ConfigParser()
+        parser.read(filename)
 
 
 app = qtw.QApplication(sys.argv)
