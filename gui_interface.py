@@ -146,6 +146,7 @@ class MainWidget(qtw.QWidget):
         self.setLayout(btn_layout)
         self.show()
         self.btn_parts_view.clicked.connect(self.car_parts_menu)
+        self.btn_log_out.clicked.connect(self.setup_ui)
 
     def add_data_to_db(self):
         super().__init__()
@@ -187,11 +188,12 @@ class MainWidget(qtw.QWidget):
         self.setWindowTitle("Car Parts")
         self.setFixedSize(900, 422)
         self.btn_show_parts = qtw.QPushButton("Show parts")
-        layout = qtw.QHBoxLayout()
+        layout = qtw.QVBoxLayout()
         layout.addWidget(self.table_widget)
         layout.addWidget(self.btn_show_parts)
-        self.table_widget.setRowCount(20)
         self.table_widget.setColumnCount(7)
+        self.table_widget.setHorizontalHeaderLabels(['Code', 'Product name', 'Category', 'Buying price', 'Client price',
+                                                    'Application', 'Manufacturer'])
         try:
             mydb = mc.connect(
                 host="localhost",
@@ -201,21 +203,22 @@ class MainWidget(qtw.QWidget):
             mycursor = mydb.cursor()
             query = 'SELECT * FROM car_parts'
             mycursor.execute(query)
-            for i in range(mycursor.rowcount):
-                self.result = mycursor.fetchall()
-                for row in self.result:
-                    self.cursor = qtg.QTextCursor(self.textEdit.document())
-                    self.cursor.insertText(row[0: -1])
+            self.result = mycursor.fetchall()
+            rows = self.table_widget.rowCount()
+            self.table_widget.setRowCount(rows + 1)
+            self.table_widget.setItem(rows, 0, qtw.QTableWidgetItem(str(query.value(0))))
+
         except mysql.connector.Error as e:
             print(e)
         self.show()
+
     # TODO
-    def read_db_config(self, filename='config.ini', section='mysql'):
-        parser = ConfigParser()
-        parser.read(filename)
-        db_config = {}
-        if parser.has_section(section):
-            items = parser.items(section)
+    # def read_db_config(self, filename='config.ini', section='mysql'):
+    #     parser = ConfigParser()
+    #     parser.read(filename)
+    #     db_config = {}
+    #     if parser.has_section(section):
+    #         items = parser.items(section)
 
 
 app = qtw.QApplication(sys.argv)
