@@ -12,6 +12,7 @@ class MainWidget(qtw.QWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.setup_ui()
+        self.db_connect = read_db_config()
         self.textfield = qtw.QLabel()
         self.table_widget = qtw.QTableWidget()
         self.cursor = qtg.QTextCursor()
@@ -193,7 +194,7 @@ class MainWidget(qtw.QWidget):
         layout.addWidget(self.btn_show_parts)
         self.table_widget.setColumnCount(7)
         self.table_widget.setHorizontalHeaderLabels(['Code', 'Product name', 'Category', 'Buying price', 'Client price',
-                                                    'Application', 'Manufacturer'])
+                                                     'Application', 'Manufacturer'])
         try:
             mydb = mc.connect(
                 host="localhost",
@@ -212,13 +213,22 @@ class MainWidget(qtw.QWidget):
             print(e)
         self.show()
 
-    # TODO
-    # def read_db_config(self, filename='config.ini', section='mysql'):
-    #     parser = ConfigParser()
-    #     parser.read(filename)
-    #     db_config = {}
-    #     if parser.has_section(section):
-    #         items = parser.items(section)
+
+def read_db_config(filename='config.ini', section='mysql'):
+    parser = ConfigParser()
+    parser.read(filename)
+    db_config = {}
+    if parser.has_section(section):
+        items = parser.items(section)
+        for item in items:
+            db_config[item[0]] = item[1]
+    else:
+        raise Exception(f'{section} not found in the {filename} file')
+
+    return db_config
+
+
+db_config = read_db_config()
 
 
 app = qtw.QApplication(sys.argv)
