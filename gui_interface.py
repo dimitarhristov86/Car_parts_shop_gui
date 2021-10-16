@@ -230,7 +230,6 @@ def read_db_config(filename='config.ini', section='mysql'):
 
 db_config = read_db_config()
 
-
 app = qtw.QApplication(sys.argv)
 
 window = MainWidget()
