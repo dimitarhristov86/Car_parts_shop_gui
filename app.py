@@ -183,7 +183,7 @@ class MainWidget(qtw.QWidget):
         layout.addWidget(self.table_widget)
         layout.addWidget(self.btn_show_parts)
         self.table_widget.setColumnCount(7)
-        self.table_widget.setHorizontalHeaderLabels(['Code', 'Product name', 'Category', 'Buying price', 'Client price',
+        self.table_widget.setHorizontalHeaderLabels(['Code', 'Product name', 'Category', 'Client price',
                                                      'Application', 'Manufacturer'])
         try:
             mydb = db_connect()
