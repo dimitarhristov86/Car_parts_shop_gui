@@ -1,11 +1,10 @@
 import sys
-
 import mysql.connector
+from db_connect import read_db_config
+from db_connect import db_connect
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtGui as qtg
-import mysql.connector as mc
 from datetime import datetime
-from configparser import ConfigParser
 
 
 class MainWidget(qtw.QWidget):
@@ -69,12 +68,7 @@ class MainWidget(qtw.QWidget):
         try:
             email = self.login_input.text()
             password = self.password_input.text()
-            mydb = mc.connect(
-                host="localhost",
-                user="root",
-                password="",
-                database="car_parts_gui"
-            )
+            mydb = db_connect()
             mycursor = mydb.cursor()
             query = f""" SELECT * FROM users WHERE 
             email='{email}' AND password='{password}'
@@ -152,11 +146,7 @@ class MainWidget(qtw.QWidget):
     def add_data_to_db(self):
         super().__init__()
         try:
-            mydb = mc.connect(
-                host="localhost",
-                user="root",
-                password="",
-                database="car_parts_gui")
+            mydb = db_connect()
             mycursor = mydb.cursor()
             user_f_name = self.user_first_name.text()
             user_l_name = self.user_last_name.text()
@@ -196,39 +186,15 @@ class MainWidget(qtw.QWidget):
         self.table_widget.setHorizontalHeaderLabels(['Code', 'Product name', 'Category', 'Buying price', 'Client price',
                                                      'Application', 'Manufacturer'])
         try:
-            mydb = mc.connect(
-                host="localhost",
-                user="root",
-                password="",
-                database="car_parts_gui")
+            mydb = db_connect()
             mycursor = mydb.cursor()
             query = 'SELECT * FROM car_parts'
             mycursor.execute(query)
             self.result = mycursor.fetchall()
-            rows = self.table_widget.rowCount()
-            self.table_widget.setRowCount(rows + 1)
-            self.table_widget.setItem(rows, 0, qtw.QTableWidgetItem(str(query.value(0))))
-
         except mysql.connector.Error as e:
             print(e)
         self.show()
 
-
-def read_db_config(filename='config.ini', section='mysql'):
-    parser = ConfigParser()
-    parser.read(filename)
-    db_config = {}
-    if parser.has_section(section):
-        items = parser.items(section)
-        for item in items:
-            db_config[item[0]] = item[1]
-    else:
-        raise Exception(f'{section} not found in the {filename} file')
-
-    return db_config
-
-
-db_config = read_db_config()
 
 app = qtw.QApplication(sys.argv)
 

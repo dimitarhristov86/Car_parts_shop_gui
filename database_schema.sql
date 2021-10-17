@@ -26,7 +26,6 @@ CREATE TABLE `car_parts` (
   `code` int DEFAULT NULL,
   `product_name` varchar(50) DEFAULT NULL,
   `category` varchar(50) DEFAULT NULL,
-  `buying_price` float DEFAULT NULL,
   `client_price` float DEFAULT NULL,
   `application` varchar(100) DEFAULT NULL,
   `manufacturer` varchar(50) DEFAULT NULL
