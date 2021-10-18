@@ -5,6 +5,7 @@ from db_connect import db_connect
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtGui as qtg
 from datetime import datetime
+from Crawler import crawler
 
 
 class MainWidget(qtw.QWidget):
