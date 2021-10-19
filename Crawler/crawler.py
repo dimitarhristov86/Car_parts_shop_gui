@@ -1,4 +1,5 @@
 import requests
+import re
 from bs4 import BeautifulSoup
 
 
@@ -13,10 +14,9 @@ class Crawler:
             try:
                 content = self.get_html_content(url)
                 self.save_content_to_html(content)
-                self.get_links_from_html(content)
+                self.get_links_from_html()
             except Exception as err:
                 print(err)
-                break
 
     def get_html_content(self, url):
         try:
@@ -32,19 +32,20 @@ class Crawler:
             print(f"No content to extract! Error: {err}")
 
     def save_content_to_html(self, content):
+        self.content = content
         # create html document
         html_doc = './html_data/motor_oils.html'
         # save html text of the response
         with open(html_doc, 'w') as f:
             f.write(content)
 
-    def get_links_from_html(self, content):
-        links = []
-        for link in BeautifulSoup(content, features='html.parser').find_all('a', href=True):
+    def get_links_from_html(self):
+        self.raw_links = []
+        for raw_link in BeautifulSoup(self.content, features='html.parser').find_all('a', href=True):
             # add just the href tags to a list(links)
-            if '/bg/autokelly/item/' in link['href']:
-                links.append(link)
-        return links
+            if '/bg/autokelly/item/' in raw_link['href']:
+                self.raw_links.append(raw_link)
+        return self.raw_links
 
 
 if __name__ == '__main__':
