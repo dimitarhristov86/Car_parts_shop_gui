@@ -60,7 +60,7 @@ class Scraper:
         for link in self.links:
             links.append(link)
             r = re.compile(r'\b[A-Z0-9][A-Z0-9]+\b')
-            new_link = list(filter(r.search, links))
+            new_link = str(filter(r.search, links))
             print(new_link)
 
 
