@@ -1,4 +1,5 @@
 import requests
+import re
 from bs4 import BeautifulSoup
 
 
@@ -47,6 +48,24 @@ class Crawler:
         return self.raw_links
 
 
+class Scraper:
+    def __init__(self, crw_links):
+        self.links = crw_links
+
+    def get_crawler_links(self):
+        return self.links
+
+    def scrape_links_to_text(self):
+        links = []
+        for link in self.links:
+            links.append(link)
+            r = re.compile(r'\b[A-Z0-9][A-Z0-9]+\b')
+            new_link = list(filter(r.search, links))
+            print(new_link)
+
+
 if __name__ == '__main__':
     crawler = Crawler('https://www.autokelly.bg/bg/products/43758570.html?ids=39849642;51224611')
     crawler.run_crawler()
+    scraper = Scraper(crw_links=crawler.raw_links)
+    scraper.scrape_links_to_text()
