@@ -6,13 +6,14 @@ from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtGui as qtg
 from datetime import datetime
 from Crawler import crawler
-
+# TODO mydb replace
 
 class MainWidget(qtw.QWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.setup_ui()
         self.db_connect = read_db_config()
+        self.mydb = db_connect()
         self.textfield = qtw.QLabel()
         self.table_widget = qtw.QTableWidget()
         self.cursor = qtg.QTextCursor()
