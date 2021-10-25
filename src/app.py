@@ -13,7 +13,7 @@ class MainWidget(qtw.QWidget):
         super().__init__(*args, **kwargs)
         self.setup_ui()
         # TODO get only mydb
-        self.mydb = db_connect()
+        self.mydb = db_connect
         self.textfield = qtw.QLabel()
         self.table_widget = qtw.QTableWidget()
         self.cursor = qtg.QTextCursor()
