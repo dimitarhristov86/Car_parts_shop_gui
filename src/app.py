@@ -1,18 +1,18 @@
 import sys
 import mysql.connector
-from db_connect import read_db_config
-from db_connect import db_connect
+from lib.crawler import Crawler
+from lib.scraper import Scraper
+from src.lib.db_connect import db_connect
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtGui as qtg
 from datetime import datetime
-from Crawler import crawler
-# TODO mydb replace
+
 
 class MainWidget(qtw.QWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.setup_ui()
-        self.db_connect = read_db_config()
+        # TODO get only mydb
         self.mydb = db_connect()
         self.textfield = qtw.QLabel()
         self.table_widget = qtw.QTableWidget()
@@ -70,8 +70,7 @@ class MainWidget(qtw.QWidget):
         try:
             email = self.login_input.text()
             password = self.password_input.text()
-            mydb = db_connect()
-            mycursor = mydb.cursor()
+            mycursor = self.mydb
             query = f""" SELECT * FROM users WHERE 
             email='{email}' AND password='{password}'
             """
@@ -148,8 +147,7 @@ class MainWidget(qtw.QWidget):
     def add_data_to_db(self):
         super().__init__()
         try:
-            mydb = db_connect()
-            mycursor = mydb.cursor()
+            mycursor = self.mydb.cursor()
             user_f_name = self.user_first_name.text()
             user_l_name = self.user_last_name.text()
             user_email = self.user_email.text()
@@ -160,7 +158,7 @@ class MainWidget(qtw.QWidget):
                     'VALUES(%s, %s, %s, %s, %s, %s)'
             values = (user_f_name, user_l_name, user_email, user_ph_number, user_password, user_created)
             mycursor.execute(query, values)
-            mydb.commit()
+            self.mydb.commit()
             self.textfield.setText("You can log in now! ")
         except mysql.connector.Error as e:
             print(e)
@@ -188,8 +186,7 @@ class MainWidget(qtw.QWidget):
         self.table_widget.setHorizontalHeaderLabels(['Code', 'Product name', 'Category', 'Client price',
                                                      'Application', 'Manufacturer'])
         try:
-            mydb = db_connect()
-            mycursor = mydb.cursor()
+            mycursor = self.mydb.cursor()
             query = 'SELECT * FROM car_parts'
             mycursor.execute(query)
             self.result = mycursor.fetchall()
@@ -198,8 +195,10 @@ class MainWidget(qtw.QWidget):
         self.show()
 
 
+crawler = Crawler('https://www.autokelly.bg/bg/products/43758570.html?ids=39849642;51224611')
+crawler.run_crawler()
+scraper = Scraper(crw_links=crawler.raw_links)
+scraper.scrape_links_to_text()
 app = qtw.QApplication(sys.argv)
-
 window = MainWidget()
-
 sys.exit(app.exec())
