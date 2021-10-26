@@ -2,7 +2,7 @@ import sys
 import mysql.connector
 from lib.crawler import Crawler
 from lib.scraper import Scraper
-from src.lib.db_connect import db_connect
+from src.lib.db import db_conn
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtGui as qtg
 from datetime import datetime
@@ -12,11 +12,11 @@ class MainWidget(qtw.QWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.setup_ui()
-        # TODO get only mydb
-        self.mydb = db_connect
         self.textfield = qtw.QLabel()
         self.table_widget = qtw.QTableWidget()
         self.cursor = qtg.QTextCursor()
+        # TODO raise key error at line 12 in db_conn()
+        self.conn = db_conn
         self.textfield.setStyleSheet('color: red')
         self.textfield.setText('')
         self.btn_sign_in.clicked.connect(self.sign_in)
