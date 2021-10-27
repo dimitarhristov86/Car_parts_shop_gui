@@ -2,7 +2,7 @@ import sys
 import mysql.connector
 from lib.crawler import Crawler
 from lib.scraper import Scraper
-from src.lib.db import db_conn
+from lib.db import db_conn
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtGui as qtg
 from datetime import datetime
@@ -83,11 +83,11 @@ class MainWidget(qtw.QWidget):
             email = self.login_input.text()
             password = self.password_input.text()
             mycursor = self.conn
-            query = f""" SELECT * FROM users WHERE
-            email='{email}' AND password='{password}'
-            """
-            mycursor.execute(query)
-            self.result = mycursor.fetchone()
+            # query = f""" SELECT * FROM users WHERE
+            # email='{email}' AND password='{password}'
+            # """
+            # mycursor.execute(query)
+            # self.result = mycursor.fetchone()
             if len(email) == 0 and len(password) == 0:
                 print("Please fill all fields! ")
                 self.textfield.setText("Please fill all fields! ")
