@@ -11,18 +11,26 @@ from datetime import datetime
 class MainWidget(qtw.QWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        if self.get_connection:
+            print('You are connected to database !')
+        else:
+            exit()
         self.setup_ui()
         self.textfield = qtw.QLabel()
-        self.table_widget = qtw.QTableWidget()
         self.cursor = qtg.QTextCursor()
-        # TODO raise key error at line 12 in db_conn()
-        self.conn = db_conn
         self.textfield.setStyleSheet('color: red')
         self.textfield.setText('')
         self.btn_sign_in.clicked.connect(self.sign_in)
         self.btn_sign_up.clicked.connect(self.sign_up_form)
         self.btn_exit.clicked.connect(exit)
         self.show()
+
+    def get_connection(self):
+        self.conn = db_conn
+        if not self.conn:
+            exit()
+        else:
+            pass
 
     def setup_ui(self):
         self.setWindowTitle("Car Parts Shop")
@@ -34,7 +42,11 @@ class MainWidget(qtw.QWidget):
         self.btn_sign_in = qtw.QPushButton("Sign in")
         self.btn_exit = qtw.QPushButton("Exit")
         self.btn_sign_up = qtw.QPushButton("Sign up")
+        self.textfield2 = qtw.QLabel()
+        self.textfield2.setStyleSheet('color: green')
+        self.textfield2.setText('You are connected now! ')
         buttons_layout = qtw.QHBoxLayout()
+        buttons_layout.addWidget(self.textfield2)
         buttons_layout.addWidget(self.btn_sign_in)
         buttons_layout.addWidget(self.btn_sign_up)
         buttons_layout.addWidget(self.btn_exit)
@@ -70,8 +82,8 @@ class MainWidget(qtw.QWidget):
         try:
             email = self.login_input.text()
             password = self.password_input.text()
-            mycursor = self.mydb
-            query = f""" SELECT * FROM users WHERE 
+            mycursor = self.conn
+            query = f""" SELECT * FROM users WHERE
             email='{email}' AND password='{password}'
             """
             mycursor.execute(query)
@@ -147,7 +159,7 @@ class MainWidget(qtw.QWidget):
     def add_data_to_db(self):
         super().__init__()
         try:
-            mycursor = self.mydb.cursor()
+            # mycursor = self.mydb.cursor()
             user_f_name = self.user_first_name.text()
             user_l_name = self.user_last_name.text()
             user_email = self.user_email.text()
@@ -157,8 +169,8 @@ class MainWidget(qtw.QWidget):
             query = 'INSERT INTO users(first_name, last_name, email, phone_number, password, created) ' \
                     'VALUES(%s, %s, %s, %s, %s, %s)'
             values = (user_f_name, user_l_name, user_email, user_ph_number, user_password, user_created)
-            mycursor.execute(query, values)
-            self.mydb.commit()
+            # mycursor.execute(query, values)
+            # self.mydb.commit()
             self.textfield.setText("You can log in now! ")
         except mysql.connector.Error as e:
             print(e)
@@ -185,13 +197,13 @@ class MainWidget(qtw.QWidget):
         self.table_widget.setColumnCount(7)
         self.table_widget.setHorizontalHeaderLabels(['Code', 'Product name', 'Category', 'Client price',
                                                      'Application', 'Manufacturer'])
-        try:
-            mycursor = self.mydb.cursor()
-            query = 'SELECT * FROM car_parts'
-            mycursor.execute(query)
-            self.result = mycursor.fetchall()
-        except mysql.connector.Error as e:
-            print(e)
+        # try:
+        #     # mycursor = self.mydb.cursor()
+        #     # query = 'SELECT * FROM car_parts'
+        #     # mycursor.execute(query)
+        #     # self.result = mycursor.fetchall()
+        # except mysql.connector.Error as e:
+        #     print(e)
         self.show()
 
 
