@@ -2,7 +2,6 @@ import sys
 import mysql.connector
 from lib.crawler import Crawler
 from lib.scraper import Scraper
-from lib.db import db_conn
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtGui as qtg
 from datetime import datetime
@@ -11,10 +10,6 @@ from datetime import datetime
 class MainWidget(qtw.QWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if self.get_connection:
-            print('You are connected to database !')
-        else:
-            exit()
         self.setup_ui()
         self.textfield = qtw.QLabel()
         self.cursor = qtg.QTextCursor()
@@ -26,11 +21,7 @@ class MainWidget(qtw.QWidget):
         self.show()
 
     def get_connection(self):
-        self.conn = db_conn
-        if not self.conn:
-            exit()
-        else:
-            pass
+        pass
 
     def setup_ui(self):
         self.setWindowTitle("Car Parts Shop")

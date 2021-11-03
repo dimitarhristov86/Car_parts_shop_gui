@@ -10,7 +10,9 @@ In development.
 ## Before first run
 Install all modules(packages needed - All required modules for app can be found in "requirements.txt")
 Database schemas included --> database_schema.sql - Empty database tables
-Database config file also included - have to be set to your specific database
+Database schemas doesn't include create statement!
+NOTE: Create config.ini file in root directory of the project and set it to your specific database info!
+
 
 ## Get help:
 dimitar_hristov86@abv.bg or +359884156033
