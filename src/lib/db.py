@@ -6,25 +6,28 @@ from sqlalchemy.orm import declarative_base
 from utils import get_project_root
 
 PROJECT_PATH = get_project_root()
-
-from sqlalchemy.sql.sqltypes import String
-
 Base = declarative_base()
 
 
 class Users(Base):
-    __tablename__ = 'users_test'
+    __tablename__ = 'users'
     id = Column(sa.Integer, primary_key=True)
+    role = Column(sa.String(5))
     first_name = Column(sa.String(20))
     last_name = Column(sa.String(20))
+    email = Column(sa.String(100))
+    phone_number = Column(sa.String(10))
+    password = Column(sa.String(20))
+    created = Column(sa.DateTime())
 
 
 class Orders(Base):
-    __tablename__ = 'orders_test'
+    __tablename__ = 'orders'
     id = Column(sa.Integer, primary_key=True)
     ordered_parts = Column(sa.String(30), nullable=False)
-    user_id = Column(sa.ForeignKey('users_test.id'), nullable=False)
-
+    user_id = Column(sa.ForeignKey('users.id'), nullable=False)
+    costs = Column(sa.Float(10))
+    profit = Column(sa.Float(20))
 
 class DB:
     def __init__(self):
@@ -45,7 +48,7 @@ class DB:
     def setup_engine(self, conn_string):
         self.engine = sa.create_engine(conn_string)
         print("You are connected :)")
-
+        return self.engine
 
     def get_tables(self):
         try:
@@ -56,7 +59,7 @@ class DB:
 
             # get all tables:
             metadata.reflect(bind=self.engine)
-            print(metadata.tables.keys())
+            # print(metadata.tables.keys())
 
 
         except Exception as err:
@@ -82,17 +85,10 @@ if __name__ == '__main__':
     db.setup_engine(db.get_connection_string())
 
     # create tables:
-    # users = Users()
+    users = Users()
 
-    # Base.metadata.create_all(self.engine)
+    Base.metadata.create_all(bind=db.engine)
 
     db.get_tables()
 
-    # insert into table
-    # data = {
-    #     "role":'admin',
-    #     "first_name":'Ada',
-    #     "email":'ada@abv.bg',
-    #     "password": '1234'
-    # }
-    # db.insert('users', data)
+

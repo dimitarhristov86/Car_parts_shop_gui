@@ -2,6 +2,8 @@ import sys
 import mysql.connector
 from lib.crawler import Crawler
 from lib.scraper import Scraper
+from lib.db import DB
+from lib.db import Users
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtGui as qtg
 from datetime import datetime
