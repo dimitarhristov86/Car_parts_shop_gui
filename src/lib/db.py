@@ -3,7 +3,7 @@ import sqlalchemy as sa
 from configparser import ConfigParser
 from sqlalchemy.sql.schema import Column, ForeignKey
 from sqlalchemy.orm import declarative_base
-from utils import get_project_root
+from src.lib.utils import get_project_root
 
 PROJECT_PATH = get_project_root()
 Base = declarative_base()
@@ -28,6 +28,7 @@ class Orders(Base):
     user_id = Column(sa.ForeignKey('users.id'), nullable=False)
     costs = Column(sa.Float(10))
     profit = Column(sa.Float(20))
+
 
 class DB:
     def __init__(self):

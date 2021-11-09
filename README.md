@@ -1,5 +1,5 @@
 # Welcome to Car Parts Shop desktop application
-![Screenshot](../images/car_parts_gui.png)
+![Screenshot](images/car_parts_gui.png)
 ## Idea
 Car Parts Shop is desktop app for car spare parts.
 The general idea of the app is to help Auto shops and auto mechanics to choose the correct spare part for clients.

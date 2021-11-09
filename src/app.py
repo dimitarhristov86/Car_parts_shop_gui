@@ -3,16 +3,20 @@ import mysql.connector
 from lib.crawler import Crawler
 from lib.scraper import Scraper
 from lib.db import DB
-from lib.db import Users
+from lib.utils import get_project_root
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtGui as qtg
 from datetime import datetime
+from sqlalchemy.orm import sessionmaker
+
+PROJECT_ROOT = get_project_root()
 
 
 class MainWidget(qtw.QWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.setup_ui()
+        self.session = sessionmaker(bind=DB.setup_engine)
         self.textfield = qtw.QLabel()
         self.cursor = qtg.QTextCursor()
         self.textfield.setStyleSheet('color: red')
@@ -22,24 +26,17 @@ class MainWidget(qtw.QWidget):
         self.btn_exit.clicked.connect(exit)
         self.show()
 
-    def get_connection(self):
-        pass
-
     def setup_ui(self):
         self.setWindowTitle("Car Parts Shop")
         self.setFixedSize(900, 422)
         self.window = qtw.QLabel(self)
         self.window.setStyleSheet(
-            "background-image: url(./images/1.jpg)")
+            f"background-image: url({PROJECT_ROOT}/images/1.jpg)")
         self.window.setFixedSize(900, 422)
         self.btn_sign_in = qtw.QPushButton("Sign in")
         self.btn_exit = qtw.QPushButton("Exit")
         self.btn_sign_up = qtw.QPushButton("Sign up")
-        self.textfield2 = qtw.QLabel()
-        self.textfield2.setStyleSheet('color: green')
-        self.textfield2.setText('You are connected now! ')
         buttons_layout = qtw.QHBoxLayout()
-        buttons_layout.addWidget(self.textfield2)
         buttons_layout.addWidget(self.btn_sign_in)
         buttons_layout.addWidget(self.btn_sign_up)
         buttons_layout.addWidget(self.btn_exit)
@@ -75,12 +72,6 @@ class MainWidget(qtw.QWidget):
         try:
             email = self.login_input.text()
             password = self.password_input.text()
-            mycursor = self.conn
-            # query = f""" SELECT * FROM users WHERE
-            # email='{email}' AND password='{password}'
-            # """
-            # mycursor.execute(query)
-            # self.result = mycursor.fetchone()
             if len(email) == 0 and len(password) == 0:
                 print("Please fill all fields! ")
                 self.textfield.setText("Please fill all fields! ")
@@ -174,9 +165,11 @@ class MainWidget(qtw.QWidget):
         confirm_password = self.user_confirm_password.text()
         self.textfield.setText('')
         if password != confirm_password:
+            self.textfield.setStyleSheet("color: red")
             self.textfield.setText("Password doesn't match! ")
         else:
             self.add_data_to_db()
+            self.textfield.setStyleSheet("color: green")
             self.textfield.setText("You can log in now!")
 
     def car_parts_menu(self):
