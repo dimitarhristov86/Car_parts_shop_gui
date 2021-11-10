@@ -2,21 +2,29 @@ import sys
 import mysql.connector
 from lib.crawler import Crawler
 from lib.scraper import Scraper
-from lib.db import DB
+from lib.db import Users, Orders
 from lib.utils import get_project_root
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtGui as qtg
 from datetime import datetime
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.engine import create_engine
 
 PROJECT_ROOT = get_project_root()
+engine = create_engine(f"mysql+pymysql://root:Dh_8601205280@localhost/car_parts_gui")
+Session = sessionmaker(bind=engine)
+
+
+# print(engine)
+# exit()
 
 
 class MainWidget(qtw.QWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.setup_ui()
-        self.session = sessionmaker(bind=DB.setup_engine)
+        self.session = Session()
+        self.session.begin()
         self.textfield = qtw.QLabel()
         self.cursor = qtg.QTextCursor()
         self.textfield.setStyleSheet('color: red')
@@ -68,21 +76,21 @@ class MainWidget(qtw.QWidget):
         self.textfield.setText("")
         self.show()
 
-    def user_verification(self):
-        try:
-            email = self.login_input.text()
-            password = self.password_input.text()
-            if len(email) == 0 and len(password) == 0:
-                print("Please fill all fields! ")
-                self.textfield.setText("Please fill all fields! ")
-            elif self.result == None:
-                print("Incorrect email or password")
-                self.textfield.setText("Incorrect email or password! ")
-            else:
-                print("You are logged in")
-                self.main_menu()
-        except mysql.connector.Error as e:
-            print(e)
+    # def user_verification(self):
+    #     try:
+    #         email = self.login_input.text()
+    #         password = self.password_input.text()
+    #         if len(email) == 0 and len(password) == 0:
+    #             print("Please fill all fields! ")
+    #             self.textfield.setText("Please fill all fields! ")
+    #         elif self.result == None:
+    #             print("Incorrect email or password")
+    #             self.textfield.setText("Incorrect email or password! ")
+    #         else:
+    #             print("You are logged in")
+    #             self.main_menu()
+    #     except mysql.connector.Error as e:
+    #         print(e)
 
     def sign_up_form(self):
         super().__init__()
@@ -143,18 +151,21 @@ class MainWidget(qtw.QWidget):
     def add_data_to_db(self):
         super().__init__()
         try:
-            # mycursor = self.mydb.cursor()
             user_f_name = self.user_first_name.text()
             user_l_name = self.user_last_name.text()
             user_email = self.user_email.text()
             user_ph_number = self.user_phone_number.text()
             user_password = self.user_password.text()
             user_created = self.user_created
-            query = 'INSERT INTO users(first_name, last_name, email, phone_number, password, created) ' \
-                    'VALUES(%s, %s, %s, %s, %s, %s)'
-            values = (user_f_name, user_l_name, user_email, user_ph_number, user_password, user_created)
-            # mycursor.execute(query, values)
-            # self.mydb.commit()
+            user = [Users(role='admin',
+                          first_name=f'{user_f_name}',
+                          last_name=f'{user_l_name}',
+                          email=f'{user_email}',
+                          phone_number=f'{user_ph_number}',
+                          password=f'{user_password}',
+                          created=f'{user_created}')]
+            self.session.add_all(user)
+            self.session.commit()
             self.textfield.setText("You can log in now! ")
         except mysql.connector.Error as e:
             print(e)
