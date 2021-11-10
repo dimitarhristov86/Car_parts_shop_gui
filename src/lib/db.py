@@ -54,14 +54,8 @@ class DB:
     def get_tables(self):
         try:
             metadata = sa.MetaData()
-            # self.users = sa.Table('users', metadata, autoload_with=self.engine)
-            # self.car_parts = sa.Table('car_parts', metadata, autoload_with=self.engine)
-            # self.orders = sa.Table('orders', metadata, autoload_with=self.engine)
-
             # get all tables:
             metadata.reflect(bind=self.engine)
-            # print(metadata.tables.keys())
-
 
         except Exception as err:
             print(f'@@@@@@@@@@@@@@@@@@@@@@: {err}')
@@ -80,7 +74,7 @@ class DB:
 
 if __name__ == '__main__':
     db = DB()
-    # print(db.get_connection_string())
+    print(db.get_connection_string())
 
     # setup engine
     db.setup_engine(db.get_connection_string())

@@ -2,7 +2,7 @@ import sys
 import mysql.connector
 from lib.crawler import Crawler
 from lib.scraper import Scraper
-from lib.db import Users, Orders
+from lib.db import DB, Users, Orders
 from lib.utils import get_project_root
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtGui as qtg
@@ -13,10 +13,6 @@ from sqlalchemy.engine import create_engine
 PROJECT_ROOT = get_project_root()
 engine = create_engine(f"mysql+pymysql://root:Dh_8601205280@localhost/car_parts_gui")
 Session = sessionmaker(bind=engine)
-
-
-# print(engine)
-# exit()
 
 
 class MainWidget(qtw.QWidget):
@@ -76,21 +72,23 @@ class MainWidget(qtw.QWidget):
         self.textfield.setText("")
         self.show()
 
-    # def user_verification(self):
-    #     try:
-    #         email = self.login_input.text()
-    #         password = self.password_input.text()
-    #         if len(email) == 0 and len(password) == 0:
-    #             print("Please fill all fields! ")
-    #             self.textfield.setText("Please fill all fields! ")
-    #         elif self.result == None:
-    #             print("Incorrect email or password")
-    #             self.textfield.setText("Incorrect email or password! ")
-    #         else:
-    #             print("You are logged in")
-    #             self.main_menu()
-    #     except mysql.connector.Error as e:
-    #         print(e)
+    def user_verification(self):
+        try:
+            email = self.login_input.text()
+            password = self.password_input.text()
+            # result = self.session.query(Users).filter(Users.email, Users.password)
+            if len(email) == 0 and len(password) == 0:
+                print("Please fill all fields! ")
+                self.textfield.setText("Please fill all fields! ")
+                # TODO:elif statement does not work
+            elif email != Users.email and password != Users.password:
+                print("Incorrect email or password")
+                self.textfield.setText("Incorrect email or password! ")
+            else:
+                print("You are logged in")
+                self.main_menu()
+        except mysql.connector.Error as e:
+            print(e)
 
     def sign_up_form(self):
         super().__init__()
