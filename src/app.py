@@ -7,6 +7,7 @@ from lib.utils import get_project_root
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtGui as qtg
 from datetime import datetime
+from sqlalchemy import and_
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.engine import create_engine
 
@@ -76,17 +77,14 @@ class MainWidget(qtw.QWidget):
         try:
             email = self.login_input.text()
             password = self.password_input.text()
-            # result = self.session.query(Users).filter(Users.email, Users.password)
-            if len(email) == 0 and len(password) == 0:
-                print("Please fill all fields! ")
+            for row in self.session.query(Users.email, Users.password):
+                if email and password not in row:
+                    self.textfield.setText("Incorrect email or password! ")
+                elif email and password in row:
+                    self.main_menu()
+                    self.textfield.setText("Login successfully")
+            if len(email) == 0 or len(password) == 0:
                 self.textfield.setText("Please fill all fields! ")
-                # TODO:elif statement does not work
-            elif email != Users.email and password != Users.password:
-                print("Incorrect email or password")
-                self.textfield.setText("Incorrect email or password! ")
-            else:
-                print("You are logged in")
-                self.main_menu()
         except mysql.connector.Error as e:
             print(e)
 

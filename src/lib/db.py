@@ -61,15 +61,15 @@ class DB:
             print(f'@@@@@@@@@@@@@@@@@@@@@@: {err}')
             exit()
 
-    def insert(self, table_name, data):
-        with self.engine.connect() as conn:
-            table = getattr(self, table_name)
-            print(type(table))
-
-            res = conn.execute(table.insert(), data)
-
-    def select(self):
-        pass
+    # def insert(self, table_name, data):
+    #     with self.engine.connect() as conn:
+    #         table = getattr(self, table_name)
+    #         print(type(table))
+    #
+    #         res = conn.execute(table.insert(), data)
+    #
+    # def select(self):
+    #     pass
 
 
 if __name__ == '__main__':
