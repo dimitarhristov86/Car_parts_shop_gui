@@ -30,6 +30,18 @@ class Orders(Base):
     profit = Column(sa.Float(20))
 
 
+class Car_parts(Base):
+    __tablename__ = 'car_parts'
+    id = Column(sa.Integer, primary_key=True)
+    product_name = Column(sa.String(100), nullable=False)
+    product_description = Column(sa.String(100))
+    category = Column(sa.String(50), nullable=False)
+    price = Column(sa.Float(10), nullable=False)
+    sell_price = Column(sa.Float(10), nullable=False)
+    application = Column(sa.String(100))
+    manufacturer = Column(sa.String(100), nullable=False)
+
+
 class DB:
     def __init__(self):
         pass
@@ -58,18 +70,8 @@ class DB:
             metadata.reflect(bind=self.engine)
 
         except Exception as err:
-            print(f'@@@@@@@@@@@@@@@@@@@@@@: {err}')
+            print(err)
             exit()
-
-    # def insert(self, table_name, data):
-    #     with self.engine.connect() as conn:
-    #         table = getattr(self, table_name)
-    #         print(type(table))
-    #
-    #         res = conn.execute(table.insert(), data)
-    #
-    # def select(self):
-    #     pass
 
 
 if __name__ == '__main__':

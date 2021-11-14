@@ -2,12 +2,11 @@ import sys
 import mysql.connector
 from lib.crawler import Crawler
 from lib.scraper import Scraper
-from lib.db import DB, Users, Orders
+from lib.db import DB, Users, Orders, Car_parts
 from lib.utils import get_project_root
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtGui as qtg
 from datetime import datetime
-from sqlalchemy import and_
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.engine import create_engine
 
@@ -186,19 +185,19 @@ class MainWidget(qtw.QWidget):
             self.textfield.setStyleSheet("color: green")
             self.textfield.setText("You can log in now!")
 
-    def car_parts_menu(self):
-        super().__init__()
-        self.setWindowTitle("Car Parts")
-        self.setFixedSize(900, 422)
-        self.btn_show_parts = qtw.QPushButton("Show parts")
-        layout = qtw.QVBoxLayout()
-        layout.addWidget(self.table_widget)
-        layout.addWidget(self.btn_show_parts)
-        self.table_widget.setColumnCount(7)
-        self.table_widget.setHorizontalHeaderLabels(['Code', 'Product name', 'Category', 'Client price',
-                                                     'Application', 'Manufacturer'])
-
-        self.show()
+    # def car_parts_menu(self):
+    #     super().__init__()
+    #     self.setWindowTitle("Car Parts")
+    #     self.setFixedSize(900, 422)
+    #     self.btn_show_parts = qtw.QPushButton("Show parts")
+    #     layout = qtw.QVBoxLayout()
+    #     layout.addWidget(self.table_widget)
+    #     layout.addWidget(self.btn_show_parts)
+    #     self.table_widget.setColumnCount(7)
+    #     self.table_widget.setHorizontalHeaderLabels(['Code', 'Product name', 'Category', 'Client price',
+    #                                                  'Application', 'Manufacturer'])
+    #
+    #     self.show()
 
 
 crawler = Crawler('https://www.autokelly.bg/bg/products/43758570.html?ids=39849642;51224611')
