@@ -78,14 +78,16 @@ class MainWidget(qtw.QWidget):
             email = self.login_input.text()
             password = self.password_input.text()
             for row in self.session.query(Users.email, Users.password):
-                if email and password not in row:
-                    self.textfield.setText("Incorrect email or password! ")
-                elif email and password in row:
+                if email and password in row:
                     self.main_menu()
+                    self.textfield.setStyleSheet("color: green")
                     self.textfield.setText("Login successfully")
+                    break
+                else:
+                    self.textfield.setText("Incorrect email or password")
             if len(email) == 0 or len(password) == 0:
                 self.textfield.setText("Please fill all fields! ")
-        except mysql.connector.Error as e:
+        except Exception as e:
             print(e)
 
     def sign_up_form(self):
@@ -101,19 +103,19 @@ class MainWidget(qtw.QWidget):
         self.user_created = datetime.now()
         self.btn_submit = qtw.QPushButton('Submit')
         self.btn_to_login = qtw.QPushButton('Click here to log in')
-        self.btn_submit.setFixedSize(150, 50)
-        self.btn_to_login.setFixedSize(150, 50)
+        self.btn_submit.setFixedSize(150, 100)
+        self.btn_to_login.setFixedSize(150, 100)
         self.textfield = qtw.QLabel(self)
         self.textfield.setStyleSheet("color: red")
         layout = qtw.QHBoxLayout()
         layout.addWidget(self.btn_submit)
         layout.addWidget(self.btn_to_login)
-        layout.setSpacing(300)
+        layout.setSpacing(150)
         new_layout = qtw.QFormLayout()
         new_layout.addRow("Enter your first name: ", self.user_first_name)
         new_layout.addRow("Enter your last name: ", self.user_last_name)
         new_layout.addRow("Enter email: ", self.user_email)
-        new_layout.addRow("Enter phone number: ", self.user_phone_number)
+        new_layout.addRow("Enter phone number (must start with 0...... and long 10 digits): ", self.user_phone_number)
         new_layout.addRow("Enter password (20 characters max): ", self.user_password)
         self.user_password.setEchoMode(qtw.QLineEdit.Password)
         new_layout.addRow("Confirm password (20 characters max): ", self.user_confirm_password)
@@ -168,12 +170,17 @@ class MainWidget(qtw.QWidget):
 
     def check_fields_data(self):
         super().__init__()
+        email = self.user_email.text()
+        phone_number = self.user_phone_number.text()
         password = self.user_password.text()
         confirm_password = self.user_confirm_password.text()
         self.textfield.setText('')
         if password != confirm_password:
             self.textfield.setStyleSheet("color: red")
             self.textfield.setText("Password doesn't match! ")
+        elif not phone_number.startswith("0") or len(phone_number) < 10:
+            self.textfield.setStyleSheet("color: red")
+            self.textfield.setText("Incorrect phone number")
         else:
             self.add_data_to_db()
             self.textfield.setStyleSheet("color: green")
@@ -190,13 +197,7 @@ class MainWidget(qtw.QWidget):
         self.table_widget.setColumnCount(7)
         self.table_widget.setHorizontalHeaderLabels(['Code', 'Product name', 'Category', 'Client price',
                                                      'Application', 'Manufacturer'])
-        # try:
-        #     # mycursor = self.mydb.cursor()
-        #     # query = 'SELECT * FROM car_parts'
-        #     # mycursor.execute(query)
-        #     # self.result = mycursor.fetchall()
-        # except mysql.connector.Error as e:
-        #     print(e)
+
         self.show()
 
 
