@@ -6,6 +6,8 @@ from lib.db import DB, Users, Orders, Car_parts
 from lib.utils import get_project_root
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtGui as qtg
+from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import QSize
 from datetime import datetime
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.engine import create_engine
@@ -93,6 +95,12 @@ class MainWidget(qtw.QWidget):
         super().__init__()
         self.setWindowTitle('Sign up Form')
         self.setFixedSize(900, 422)
+        self.window = qtw.QLabel(self)
+        self.window.setStyleSheet(
+            f"background-image: url({PROJECT_ROOT}/images/image.png)")
+        self.window.setFixedSize(900, 422)
+        self.submit_icon = QIcon(f'{PROJECT_ROOT}/images/submit-icon.jpg')
+        self.login_icon = QIcon(f'{PROJECT_ROOT}/images/login.jpg')
         self.user_first_name = qtw.QLineEdit(self)
         self.user_last_name = qtw.QLineEdit(self)
         self.user_email = qtw.QLineEdit(self)
@@ -101,9 +109,13 @@ class MainWidget(qtw.QWidget):
         self.user_confirm_password = qtw.QLineEdit(self)
         self.user_created = datetime.now()
         self.btn_submit = qtw.QPushButton('Submit')
+        self.btn_submit.setIcon(self.submit_icon)
         self.btn_to_login = qtw.QPushButton('Click here to log in')
+        self.btn_to_login.setIcon((self.login_icon))
         self.btn_submit.setFixedSize(150, 100)
+        self.btn_submit.setStyleSheet('background-color: white')
         self.btn_to_login.setFixedSize(150, 100)
+        self.btn_to_login.setStyleSheet('background-color: white')
         self.textfield = qtw.QLabel(self)
         self.textfield.setStyleSheet("color: red")
         layout = qtw.QHBoxLayout()
