@@ -112,9 +112,9 @@ class MainWidget(qtw.QWidget):
         self.btn_submit.setIcon(self.submit_icon)
         self.btn_to_login = qtw.QPushButton('Click here to log in')
         self.btn_to_login.setIcon((self.login_icon))
-        self.btn_submit.setFixedSize(150, 100)
+        self.btn_submit.setFixedSize(150, 50)
         self.btn_submit.setStyleSheet('background-color: white')
-        self.btn_to_login.setFixedSize(150, 100)
+        self.btn_to_login.setFixedSize(150, 50)
         self.btn_to_login.setStyleSheet('background-color: white')
         self.textfield = qtw.QLabel(self)
         self.textfield.setStyleSheet("color: red")
@@ -216,6 +216,18 @@ crawler = Crawler('https://www.autokelly.bg/bg/products/43758570.html?ids=398496
 crawler.run_crawler()
 scraper = Scraper(crw_links=crawler.raw_links)
 scraper.scrape_links_to_text()
+
+# TODO-finish this
+# def add_scraped_data_to_db():
+#     item_info = []
+#     for item in scraper.scrape_links_to_text():
+#         item_info.append(item)
+#     print(item_info)
+# add_scraped_data_to_db()
+
 app = qtw.QApplication(sys.argv)
 window = MainWidget()
 sys.exit(app.exec())
+
+
+
