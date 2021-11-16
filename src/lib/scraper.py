@@ -9,7 +9,10 @@ class Scraper:
         return self.links
 
     def scrape_links_to_text(self):
+        items = []
         for link in self.links:
             r = re.compile(r'.+?>([^<]+)')
             res = r.search(str(link))
-            return res.group(1)
+            items.append(res.group(1))
+        return items
+

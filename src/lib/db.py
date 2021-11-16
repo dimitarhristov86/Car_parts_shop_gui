@@ -36,8 +36,6 @@ class Car_parts(Base):
     product_name = Column(sa.String(100), nullable=False)
     product_description = Column(sa.String(100))
     category = Column(sa.String(50), nullable=False)
-    price = Column(sa.Float(10), nullable=False)
-    sell_price = Column(sa.Float(10), nullable=False)
     application = Column(sa.String(100))
     manufacturer = Column(sa.String(100), nullable=False)
 
