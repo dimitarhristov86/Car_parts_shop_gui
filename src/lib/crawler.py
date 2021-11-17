@@ -61,7 +61,3 @@ class Crawler:
                 self.raw_links.append(raw_link)
         return self.raw_links
 
-
-if __name__ == '__main__':
-    from utils import get_data_path
-    print(get_data_path())

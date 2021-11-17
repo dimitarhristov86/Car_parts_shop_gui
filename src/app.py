@@ -7,7 +7,6 @@ from lib.utils import get_project_root
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtGui as qtg
 from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import QSize
 from datetime import datetime
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.engine import create_engine
@@ -21,7 +20,6 @@ class MainWidget(qtw.QWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.setup_ui()
-        self.add_scraped_data_to_db()
         self.session = Session()
         self.session.begin()
         self.textfield = qtw.QLabel()
@@ -182,7 +180,6 @@ class MainWidget(qtw.QWidget):
 
     def check_fields_data(self):
         super().__init__()
-        email = self.user_email.text()
         phone_number = self.user_phone_number.text()
         password = self.user_password.text()
         confirm_password = self.user_confirm_password.text()
@@ -197,27 +194,6 @@ class MainWidget(qtw.QWidget):
             self.add_data_to_db()
             self.textfield.setStyleSheet("color: green")
             self.textfield.setText("You can log in now!")
-
-    # TODO: self.session doesn't recognized in add_scraped_data_to_db()
-    def add_scraped_data_to_db(self):
-        super().__init__()
-        item_info = []
-        for items in scraper.scrape_links_to_text():
-            item_info.append(items)
-        for item in item_info:
-            item_name = item
-            item_description = 'Engine oil for light vehicles'
-            item_category = 'Engine oil'
-            item_application = 'Use in light vehicles'
-            item_manufacturer = item[0]
-            car_part = [Car_parts(
-                product_name=item_name,
-                product_description=item_description,
-                category=item_category,
-                application=item_application,
-                manufacturer=item_manufacturer)]
-            self.session.add_all(car_part)
-            self.session.commit()
 
     # def car_parts_menu(self):
     #     super().__init__()
@@ -238,6 +214,7 @@ crawler = Crawler('https://www.autokelly.bg/bg/products/43758570.html?ids=398496
 crawler.run_crawler()
 scraper = Scraper(crw_links=crawler.raw_links)
 scraper.scrape_links_to_text()
+scraper.add_scraped_data_to_db()
 app = qtw.QApplication(sys.argv)
 window = MainWidget()
 sys.exit(app.exec())
