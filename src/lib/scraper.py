@@ -23,7 +23,16 @@ class Scraper:
             res = r.search(str(link))
             items.append(res.group(1))
         return items
-    # TODO:check if table is not empty
+
+    def check_table_content(self):
+        for row in self.session.query(Car_parts.manufacturer):
+            brand = 'CASTROL'
+            if brand not in row:
+                self.add_scraped_data_to_db()
+            else:
+                print('Table is not empty')
+                break
+
     def add_scraped_data_to_db(self):
         try:
             item_info = []
@@ -39,11 +48,11 @@ class Scraper:
                 item_application = 'Use in light vehicles'
                 item_manufacturer = item.split()[0]
                 car_part = [Car_parts(
-                    product_name=item_name,
-                    product_description=item_description,
-                    category=item_category,
-                    application=item_application,
-                    manufacturer=item_manufacturer)]
+                        product_name=item_name,
+                        product_description=item_description,
+                        category=item_category,
+                        application=item_application,
+                        manufacturer=item_manufacturer)]
                 self.session.add_all(car_part)
                 self.session.commit()
         except Exception as e:

@@ -214,7 +214,7 @@ crawler = Crawler('https://www.autokelly.bg/bg/products/43758570.html?ids=398496
 crawler.run_crawler()
 scraper = Scraper(crw_links=crawler.raw_links)
 scraper.scrape_links_to_text()
-scraper.add_scraped_data_to_db()
+scraper.check_table_content()
 app = qtw.QApplication(sys.argv)
 window = MainWidget()
 sys.exit(app.exec())
