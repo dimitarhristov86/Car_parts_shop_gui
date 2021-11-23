@@ -141,20 +141,20 @@ class MainWidget(qtw.QWidget):
     def main_menu(self):
         super().__init__()
         self.setWindowTitle("Car Parts Shop Main Menu")
-        self.setFixedSize(900, 422)
         self.btn_parts_view = qtw.QPushButton('View all parts')
-        self.btn_buy_parts = qtw.QPushButton('Buy parts')
+        self.btn_parts_view.setFixedSize(100, 50)
         self.btn_log_out = qtw.QPushButton('Log out')
+        self.btn_log_out.setFixedSize(100, 50)
         self.btn_admin_menu = qtw.QPushButton('Admin menu')
+        self.btn_admin_menu.setFixedSize(100, 50)
         btn_layout = qtw.QVBoxLayout()
         btn_layout.addWidget(self.btn_parts_view)
-        btn_layout.addWidget(self.btn_buy_parts)
         btn_layout.addWidget(self.btn_log_out)
         btn_layout.addWidget(self.btn_admin_menu)
         self.setLayout(btn_layout)
-        self.show()
         self.btn_parts_view.clicked.connect(self.car_parts_menu)
         self.btn_log_out.clicked.connect(self.setup_ui)
+        self.show()
 
     def add_data_to_db(self):
         super().__init__()
@@ -195,19 +195,23 @@ class MainWidget(qtw.QWidget):
             self.textfield.setStyleSheet("color: green")
             self.textfield.setText("You can log in now!")
 
-    # def car_parts_menu(self):
-    #     super().__init__()
-    #     self.setWindowTitle("Car Parts")
-    #     self.setFixedSize(900, 422)
-    #     self.btn_show_parts = qtw.QPushButton("Show parts")
-    #     layout = qtw.QVBoxLayout()
-    #     layout.addWidget(self.table_widget)
-    #     layout.addWidget(self.btn_show_parts)
-    #     self.table_widget.setColumnCount(7)
-    #     self.table_widget.setHorizontalHeaderLabels(['Code', 'Product name', 'Category', 'Client price',
-    #                                                  'Application', 'Manufacturer'])
-    #
-    #     self.show()
+    def car_parts_menu(self):
+        super().__init__()
+        self.setWindowTitle("Car Parts")
+        self.setFixedSize(900, 422)
+        table_widget = qtw.QTableWidget()
+        table_widget.setRowCount(153)
+        table_widget.setColumnCount(6)
+        table_widget.setItem(0, 0, qtw.QTableWidgetItem('ID'))
+        table_widget.setItem(0, 1, qtw.QTableWidgetItem('Product name'))
+        table_widget.setItem(0, 2, qtw.QTableWidgetItem('Product description'))
+        table_widget.setItem(0, 3, qtw.QTableWidgetItem('Category'))
+        table_widget.setItem(0, 4, qtw.QTableWidgetItem('Application'))
+        table_widget.setItem(0, 5, qtw.QTableWidgetItem('Manufacturer'))
+        vbox = qtw.QVBoxLayout()
+        vbox.addWidget(table_widget)
+        self.setLayout(vbox)
+        self.show()
 
 
 crawler = Crawler('https://www.autokelly.bg/bg/products/43758570.html?ids=39849642;51224611')
