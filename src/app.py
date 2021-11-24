@@ -199,17 +199,25 @@ class MainWidget(qtw.QWidget):
         super().__init__()
         self.setWindowTitle("Car Parts")
         self.setFixedSize(900, 422)
-        table_widget = qtw.QTableWidget()
-        table_widget.setRowCount(153)
-        table_widget.setColumnCount(6)
-        table_widget.setItem(0, 0, qtw.QTableWidgetItem('ID'))
-        table_widget.setItem(0, 1, qtw.QTableWidgetItem('Product name'))
-        table_widget.setItem(0, 2, qtw.QTableWidgetItem('Product description'))
-        table_widget.setItem(0, 3, qtw.QTableWidgetItem('Category'))
-        table_widget.setItem(0, 4, qtw.QTableWidgetItem('Application'))
-        table_widget.setItem(0, 5, qtw.QTableWidgetItem('Manufacturer'))
+        self.table_widget = qtw.QTableWidget()
+        self.table_widget.setRowCount(152)
+        self.table_widget.setColumnCount(6)
+        self.table_widget.setHorizontalHeaderLabels(['ID', 'Product name', 'Product description',
+                                                     'Category', 'Application', 'Manufacturer'])
+        row_count = 0
+        for row in self.session.query(Car_parts.id, Car_parts.product_name,
+                                      Car_parts.product_description,
+                                      Car_parts.category, Car_parts.application,
+                                      Car_parts.manufacturer).all():
+            self.table_widget.setItem(row_count, 0, qtw.QTableWidgetItem(str(row[0])))
+            self.table_widget.setItem(row_count, 1, qtw.QTableWidgetItem(row[1]))
+            self.table_widget.setItem(row_count, 2, qtw.QTableWidgetItem(row[2]))
+            self.table_widget.setItem(row_count, 3, qtw.QTableWidgetItem(row[3]))
+            self.table_widget.setItem(row_count, 4, qtw.QTableWidgetItem(row[4]))
+            self.table_widget.setItem(row_count, 5, qtw.QTableWidgetItem(row[5]))
+            row_count += 1
         vbox = qtw.QVBoxLayout()
-        vbox.addWidget(table_widget)
+        vbox.addWidget(self.table_widget)
         self.setLayout(vbox)
         self.show()
 
