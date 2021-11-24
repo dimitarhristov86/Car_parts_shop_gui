@@ -6,6 +6,7 @@ from lib.db import DB, Users, Orders, Car_parts
 from lib.utils import get_project_root
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtGui as qtg
+from PyQt5 import QtCore
 from PyQt5.QtGui import QIcon
 from datetime import datetime
 from sqlalchemy.orm import sessionmaker
@@ -198,12 +199,18 @@ class MainWidget(qtw.QWidget):
     def car_parts_menu(self):
         super().__init__()
         self.setWindowTitle("Car Parts")
-        self.setFixedSize(900, 422)
+        self.setFixedSize(1280, 720)
         self.table_widget = qtw.QTableWidget()
         self.table_widget.setRowCount(152)
         self.table_widget.setColumnCount(6)
         self.table_widget.setHorizontalHeaderLabels(['ID', 'Product name', 'Product description',
                                                      'Category', 'Application', 'Manufacturer'])
+        self.table_widget.setColumnWidth(0, 2)
+        self.table_widget.setColumnWidth(1, 400)
+        self.table_widget.setColumnWidth(2, 200)
+        self.table_widget.setColumnWidth(3, 100)
+        self.table_widget.setColumnWidth(4, 150)
+        self.table_widget.setColumnWidth(5, 100)
         row_count = 0
         for row in self.session.query(Car_parts.id, Car_parts.product_name,
                                       Car_parts.product_description,
