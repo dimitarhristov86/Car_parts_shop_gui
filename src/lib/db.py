@@ -1,7 +1,7 @@
 import os
 import sqlalchemy as sa
 from configparser import ConfigParser
-from sqlalchemy.sql.schema import Column, ForeignKey
+from sqlalchemy.sql.schema import Column
 from sqlalchemy.orm import declarative_base
 from src.lib.utils import get_project_root
 
@@ -41,11 +41,11 @@ class Car_parts(Base):
 
 
 class DB:
-    def __init__(self):
-        pass
+    # def __init__(self):
+    #     self.conn = self.get_connection_string()
 
     def get_connection_string(self):
-        config_file_path = '../../config.ini'
+        config_file_path = f'{PROJECT_PATH}/config.ini'
         if os.path.exists(config_file_path):
             conf_obj = ConfigParser()
             conf_obj.read(config_file_path)
@@ -61,16 +61,6 @@ class DB:
         print("You are connected :)")
         return self.engine
 
-    def get_tables(self):
-        try:
-            metadata = sa.MetaData()
-            # get all tables:
-            metadata.reflect(bind=self.engine)
-
-        except Exception as err:
-            print(err)
-            exit()
-
 
 if __name__ == '__main__':
     db = DB()
@@ -84,6 +74,5 @@ if __name__ == '__main__':
 
     Base.metadata.create_all(bind=db.engine)
 
-    db.get_tables()
 
 

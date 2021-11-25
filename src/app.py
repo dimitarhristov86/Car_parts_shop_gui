@@ -6,15 +6,10 @@ from lib.db import DB, Users, Orders, Car_parts
 from lib.utils import get_project_root
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtGui as qtg
-from PyQt5 import QtCore
 from PyQt5.QtGui import QIcon
 from datetime import datetime
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.engine import create_engine
-
-PROJECT_ROOT = get_project_root()
-engine = create_engine(f"mysql+pymysql://root:Dh_8601205280@localhost/car_parts_gui")
-Session = sessionmaker(bind=engine)
 
 
 class MainWidget(qtw.QWidget):
@@ -234,6 +229,11 @@ crawler.run_crawler()
 scraper = Scraper(crw_links=crawler.raw_links)
 scraper.scrape_links_to_text()
 scraper.check_table_content()
+db = DB()
+conn = db.get_connection_string()
+engine = create_engine(conn)
+Session = sessionmaker(bind=engine)
+PROJECT_ROOT = get_project_root()
 app = qtw.QApplication(sys.argv)
 window = MainWidget()
 sys.exit(app.exec())

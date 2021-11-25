@@ -1,9 +1,11 @@
 import re
-from src.lib.db import Car_parts
+from src.lib.db import DB, Car_parts
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.engine import create_engine
 
-engine = create_engine(f"mysql+pymysql://root:Dh_8601205280@localhost/car_parts_gui")
+db = DB()
+conn = db.get_connection_string()
+engine = create_engine(conn)
 Session = sessionmaker(bind=engine)
 
 
