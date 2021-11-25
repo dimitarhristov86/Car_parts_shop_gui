@@ -7,6 +7,7 @@ from lib.utils import get_project_root
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtGui as qtg
 from PyQt5.QtGui import QIcon
+from PyQt5 import QtCore
 from datetime import datetime
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.engine import create_engine
@@ -74,15 +75,19 @@ class MainWidget(qtw.QWidget):
             email = self.login_input.text()
             password = self.password_input.text()
             for row in self.session.query(Users.email, Users.password):
-                if email and password in row:
-                    self.main_menu()
+                if len(email) == 0 or len(password) == 0:
+                    self.textfield.setStyleSheet("color: red")
+                    self.textfield.setText("Please fill all fields! ")
+                    break
+                if email in row.email and password in row.password:
                     self.textfield.setStyleSheet("color: green")
                     self.textfield.setText("Login successfully")
+                    if self.textfield.text() == 'Login successfully':
+                        self.main_menu()
                     break
                 else:
+                    self.textfield.setStyleSheet("color: red")
                     self.textfield.setText("Incorrect email or password")
-            if len(email) == 0 or len(password) == 0:
-                self.textfield.setText("Please fill all fields! ")
         except Exception as e:
             print(e)
 
@@ -103,10 +108,13 @@ class MainWidget(qtw.QWidget):
         self.user_password = qtw.QLineEdit(self)
         self.user_confirm_password = qtw.QLineEdit(self)
         self.user_created = datetime.now()
-        self.btn_submit = qtw.QPushButton('Submit')
+        self.btn_submit = qtw.QPushButton('')
         self.btn_submit.setIcon(self.submit_icon)
-        self.btn_to_login = qtw.QPushButton('Click here to log in')
+        size = QtCore.QSize(150, 100)
+        self.btn_submit.setIconSize(size)
+        self.btn_to_login = qtw.QPushButton('')
         self.btn_to_login.setIcon((self.login_icon))
+        self.btn_to_login.setIconSize(size)
         self.btn_submit.setFixedSize(150, 50)
         self.btn_submit.setStyleSheet('background-color: white')
         self.btn_to_login.setFixedSize(150, 50)
@@ -141,12 +149,12 @@ class MainWidget(qtw.QWidget):
         self.btn_parts_view.setFixedSize(100, 50)
         self.btn_log_out = qtw.QPushButton('Log out')
         self.btn_log_out.setFixedSize(100, 50)
-        self.btn_admin_menu = qtw.QPushButton('Admin menu')
-        self.btn_admin_menu.setFixedSize(100, 50)
+        # self.btn_admin_menu = qtw.QPushButton('Admin menu')
+        # self.btn_admin_menu.setFixedSize(100, 50)
         btn_layout = qtw.QVBoxLayout()
         btn_layout.addWidget(self.btn_parts_view)
         btn_layout.addWidget(self.btn_log_out)
-        btn_layout.addWidget(self.btn_admin_menu)
+        # btn_layout.addWidget(self.btn_admin_menu)
         self.setLayout(btn_layout)
         self.btn_parts_view.clicked.connect(self.car_parts_menu)
         self.btn_log_out.clicked.connect(self.setup_ui)
@@ -161,7 +169,7 @@ class MainWidget(qtw.QWidget):
             user_ph_number = self.user_phone_number.text()
             user_password = self.user_password.text()
             user_created = self.user_created
-            user = [Users(role='admin',
+            user = [Users(role='user',
                           first_name=f'{user_f_name}',
                           last_name=f'{user_l_name}',
                           email=f'{user_email}',
