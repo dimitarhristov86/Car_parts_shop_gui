@@ -157,7 +157,7 @@ class MainWidget(qtw.QWidget):
         # btn_layout.addWidget(self.btn_admin_menu)
         self.setLayout(btn_layout)
         self.btn_parts_view.clicked.connect(self.car_parts_menu)
-        self.btn_log_out.clicked.connect(self.setup_ui)
+        self.btn_log_out.clicked.connect(self.sign_in)
         self.show()
 
     def add_data_to_db(self):
