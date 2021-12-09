@@ -2,7 +2,7 @@ import sys
 import mysql.connector
 from lib.crawler import Crawler
 from lib.scraper import Scraper
-from lib.db import DB, Users, Orders, Car_parts
+from lib.db import DB, Users, Car_parts
 from lib.utils import get_project_root
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtGui as qtg
@@ -10,7 +10,6 @@ from PyQt5.QtGui import QIcon
 from PyQt5 import QtCore
 from datetime import datetime
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.engine import create_engine
 
 
 class MainWidget(qtw.QWidget):
@@ -149,12 +148,9 @@ class MainWidget(qtw.QWidget):
         self.btn_parts_view.setFixedSize(100, 50)
         self.btn_log_out = qtw.QPushButton('Log out')
         self.btn_log_out.setFixedSize(100, 50)
-        # self.btn_admin_menu = qtw.QPushButton('Admin menu')
-        # self.btn_admin_menu.setFixedSize(100, 50)
         btn_layout = qtw.QVBoxLayout()
         btn_layout.addWidget(self.btn_parts_view)
         btn_layout.addWidget(self.btn_log_out)
-        # btn_layout.addWidget(self.btn_admin_menu)
         self.setLayout(btn_layout)
         self.btn_parts_view.clicked.connect(self.car_parts_menu)
         self.btn_log_out.clicked.connect(self.sign_in)

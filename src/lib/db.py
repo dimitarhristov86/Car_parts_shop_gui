@@ -41,8 +41,6 @@ class Car_parts(Base):
 
 
 class DB:
-    # def __init__(self):
-    #     self.conn = self.get_connection_string()
 
     def get_connection_string(self):
         config_file_path = f'{PROJECT_PATH}/config.ini'
@@ -60,19 +58,6 @@ class DB:
         self.engine = sa.create_engine(conn_string)
         print("You are connected :)")
         return self.engine
-
-
-if __name__ == '__main__':
-    db = DB()
-    print(db.get_connection_string())
-
-    # setup engine
-    db.setup_engine(db.get_connection_string())
-
-    # create tables:
-    users = Users()
-
-    Base.metadata.create_all(bind=db.engine)
 
 
 
