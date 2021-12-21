@@ -78,7 +78,7 @@ class MainWidget(qtw.QWidget):
                     self.textfield.setStyleSheet("color: red")
                     self.textfield.setText("Please fill all fields! ")
                     break
-                if email in row.email and password in row.password:
+                if email == row.email and password == row.password:
                     self.textfield.setStyleSheet("color: green")
                     self.textfield.setText("Login successfully")
                     if self.textfield.text() == 'Login successfully':
@@ -114,10 +114,12 @@ class MainWidget(qtw.QWidget):
         self.btn_to_login = qtw.QPushButton('')
         self.btn_to_login.setIcon((self.login_icon))
         self.btn_to_login.setIconSize(size)
-        self.btn_submit.setFixedSize(150, 50)
+        self.btn_submit.setFixedSize(150, 90)
         self.btn_submit.setStyleSheet('background-color: white')
-        self.btn_to_login.setFixedSize(150, 50)
+        self.btn_submit.setStyleSheet('border: solid')
+        self.btn_to_login.setFixedSize(140, 100)
         self.btn_to_login.setStyleSheet('background-color: white')
+        self.btn_to_login.setStyleSheet('border: solid')
         self.textfield = qtw.QLabel(self)
         self.textfield.setStyleSheet("color: red")
         layout = qtw.QHBoxLayout()
@@ -180,6 +182,9 @@ class MainWidget(qtw.QWidget):
 
     def check_fields_data(self):
         super().__init__()
+        first_name = self.user_first_name.text()
+        last_name = self.user_last_name.text()
+        email = self.user_email.text()
         phone_number = self.user_phone_number.text()
         password = self.user_password.text()
         confirm_password = self.user_confirm_password.text()
@@ -187,6 +192,8 @@ class MainWidget(qtw.QWidget):
         if password != confirm_password:
             self.textfield.setStyleSheet("color: red")
             self.textfield.setText("Password doesn't match! ")
+        elif len(email) == 0:
+            self.textfield.setText("Please fill all fields! ")
         elif not phone_number.startswith("0") or len(phone_number) < 10:
             self.textfield.setStyleSheet("color: red")
             self.textfield.setText("Incorrect phone number")
