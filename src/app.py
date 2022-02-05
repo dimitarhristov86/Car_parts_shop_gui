@@ -1,5 +1,8 @@
 import sys
 import mysql.connector
+import time
+
+
 from lib.crawler import Crawler
 from lib.scraper import Scraper
 from lib.db import DB, Users, Car_parts
@@ -181,26 +184,32 @@ class MainWidget(qtw.QWidget):
             print(e)
 
     def check_fields_data(self):
-        super().__init__()
-        first_name = self.user_first_name.text()
-        last_name = self.user_last_name.text()
-        email = self.user_email.text()
-        phone_number = self.user_phone_number.text()
-        password = self.user_password.text()
-        confirm_password = self.user_confirm_password.text()
-        self.textfield.setText('')
-        if password != confirm_password:
+        try:
+            super().__init__()
+            email = self.user_email.text()
+            phone_number = self.user_phone_number.text()
+            password = self.user_password.text()
+            confirm_password = self.user_confirm_password.text()
+            self.textfield.setText('')
+            if password != confirm_password:
+                self.textfield.setStyleSheet("color: red")
+                self.textfield.setText("Password doesn't match! ")
+            elif len(email) == 0:
+                self.textfield.setText("Please fill all fields! ")
+            elif not phone_number.startswith("0"):
+                self.textfield.setStyleSheet("color: red")
+                self.textfield.setText("Incorrect phone number")
+            elif len(phone_number) <= 9:
+                self.textfield.setStyleSheet("color: red")
+                self.textfield.setText("Incorrect phone number")
+            else:
+                self.add_data_to_db()
+                self.textfield.setStyleSheet("color: green")
+                self.textfield.setText("You can log in now!")
+        except Exception:
             self.textfield.setStyleSheet("color: red")
-            self.textfield.setText("Password doesn't match! ")
-        elif len(email) == 0:
-            self.textfield.setText("Please fill all fields! ")
-        elif not phone_number.startswith("0") or len(phone_number) < 10:
-            self.textfield.setStyleSheet("color: red")
-            self.textfield.setText("Incorrect phone number")
-        else:
-            self.add_data_to_db()
-            self.textfield.setStyleSheet("color: green")
-            self.textfield.setText("You can log in now!")
+            self.textfield.setText("Wrong phone number format, close app and try again to sign up!")
+            time.sleep(3)
 
     def car_parts_menu(self):
         super().__init__()

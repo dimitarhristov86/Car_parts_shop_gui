@@ -4,6 +4,7 @@ import threading
 import warnings
 from src.lib.utils import get_data_path
 
+# ignore website warnings
 warnings.filterwarnings('ignore')
 
 DATA_PATH = get_data_path()
@@ -56,7 +57,7 @@ class Crawler:
     def get_links_from_html(self, content):
         self.raw_links = []
         for raw_link in BeautifulSoup(content, features='html.parser').find_all('a', href=True):
-            # add just the href tags to a list(links)
+            # add just the href tags <a> to list(links)
             if '/bg/autokelly/item/' in raw_link['href']:
                 self.raw_links.append(raw_link)
         return self.raw_links
