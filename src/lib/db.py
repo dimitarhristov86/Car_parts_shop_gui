@@ -4,11 +4,13 @@ from configparser import ConfigParser
 from sqlalchemy.sql.schema import Column
 from sqlalchemy.orm import declarative_base
 from src.lib.utils import get_project_root
-
+# get the project path
 PROJECT_PATH = get_project_root()
+# declarative_base() returns a Base class from which all classes(tables) will inherit
 Base = declarative_base()
 
 
+# create Users table in db
 class Users(Base):
     __tablename__ = 'users'
     id = Column(sa.Integer, primary_key=True)
@@ -21,6 +23,7 @@ class Users(Base):
     created = Column(sa.DateTime())
 
 
+# create Orders table in db
 class Orders(Base):
     __tablename__ = 'orders'
     id = Column(sa.Integer, primary_key=True)
@@ -30,6 +33,7 @@ class Orders(Base):
     profit = Column(sa.Float(20))
 
 
+# create Car_parts table in db
 class Car_parts(Base):
     __tablename__ = 'car_parts'
     id = Column(sa.Integer, primary_key=True)
@@ -43,18 +47,27 @@ class Car_parts(Base):
 class DB:
 
     def get_connection_string(self):
+        # set variable for config.ini file path as str
         config_file_path = f'{PROJECT_PATH}/config.ini'
+        # check if the path(config.ini file) exist
         if os.path.exists(config_file_path):
+            # set variable for ConfigParser() class which is used for configuration purposes
             conf_obj = ConfigParser()
+            # read the config.ini file
             conf_obj.read(config_file_path)
+            # set variables for database connection
             db_section = conf_obj['mysql']
             host = db_section['HOST']
             user = db_section['USER']
             password = db_section['PASSWORD']
             db = db_section['DATABASE']
+            # returning the connection string for db connection
             return f"mysql+pymysql://{user}:{password}@{host}/{db}"
+        else:
+            print("No configuration file found! ")
 
     def setup_engine(self, conn_string):
+        # initialize connection engine that will take the connection string to connect to db
         self.engine = sa.create_engine(conn_string)
         print("You are connected :)")
         return self.engine
